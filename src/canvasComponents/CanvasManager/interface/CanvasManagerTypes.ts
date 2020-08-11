@@ -3,6 +3,6 @@ export interface IMousePosition {
   y: number;
 }
 
-export interface ICanvasWrapperOptions {
+export interface ICanvasManagerOptions {
   mousePosition: IMousePosition;
 }
