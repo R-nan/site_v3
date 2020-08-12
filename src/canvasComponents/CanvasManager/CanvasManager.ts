@@ -32,7 +32,7 @@ export default class CanvasManager {
   public update(): void {
     const {width, height } = this.canvas;
     this.context.clearRect(0, 0, width, height);
-    this.context.fillStyle = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`
+    this.context.fillStyle = 'white';
     this.context.fillRect(0, 0, width, height);
     this.modifiers.map(modifier => modifier());
     this.requestId = window.requestAnimationFrame(() => this.update());

@@ -1,6 +1,7 @@
 import CanvasManager from "../CanvasManager/CanvasManager";
 import * as FontPathRenderer from 'fontpath-canvas';
-import { IFontRendererOptions } from "./interface/FontRendererTypes";
+import { IFontRendererOptions, IAnimatedValues, IColor } from "./interface/FontRendererTypes";
+import gsap from 'gsap';
 
 export default class FontRenderer {
   private canvasManager: CanvasManager;
@@ -8,6 +9,7 @@ export default class FontRenderer {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   private renderer: any;
+  private animatedValues: IAnimatedValues;
 
   constructor(canvasManager: CanvasManager, options: IFontRendererOptions) {
     this.canvasManager = canvasManager;
@@ -15,6 +17,7 @@ export default class FontRenderer {
     this.canvas = this.canvasManager.canvas;
     this.context = this.canvasManager.context;
     this.renderer = new FontPathRenderer();
+    this.animatedValues = this.options.color ? {color: this.options.color} : {color: {r:0,g:0,b:0}};
   }
 
   public init(): void {
@@ -50,11 +53,16 @@ export default class FontRenderer {
       pad * 2 + bounds.height + descender,
     );
 
-    //now draw the text
-    this.context.fillStyle = 'white';
-    this.renderer.fill(this.context, x, y);
-
     this.canvasManager.modifiers.push(this.draw.bind(this ));
+  }
+
+  public changeColor(color: IColor) {
+    const {r, g, b, a} = color;
+    gsap.to(
+      this.animatedValues.color, 
+      1, 
+      { r, g, b, a, ease: 'power2.out' }
+    );
   }
 
   public draw() {
@@ -62,7 +70,7 @@ export default class FontRenderer {
     //center the text in the window
     const x = (window.innerWidth - bounds.width) / 2,
       y = bounds.height + (window.innerHeight - bounds.height) / 2;
-    this.context.fillStyle = `rgb(144, 142, 32)`;
+    this.context.fillStyle = `rgba(${this.animatedValues.color.r}, ${this.animatedValues.color.g}, ${this.animatedValues.color.b})`;
     this.renderer.fill(this.context, x, y);
   }
 }
