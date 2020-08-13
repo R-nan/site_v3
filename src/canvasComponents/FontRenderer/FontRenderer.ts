@@ -1,7 +1,8 @@
 import CanvasManager from "../CanvasManager/CanvasManager";
 import * as FontPathRenderer from 'fontpath-canvas';
-import { IFontRendererOptions, IAnimatedValues, IColor } from "./interface/FontRendererTypes";
+import { IFontRendererOptions, IAnimatedValues } from "./IFontRenderer";
 import gsap from 'gsap';
+import IColor from "../../interface/IColor";
 
 export default class FontRenderer {
   private canvasManager: CanvasManager;

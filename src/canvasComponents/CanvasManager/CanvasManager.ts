@@ -1,4 +1,4 @@
-import { IMousePosition, ICanvasManagerOptions } from "./interface/CanvasManagerTypes";
+import { IMousePosition, ICanvasManagerOptions } from "./ICanvasManager";
 
 export default class CanvasManager {
   public canvas!: HTMLCanvasElement;
