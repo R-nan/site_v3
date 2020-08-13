@@ -28,8 +28,6 @@ function Vector() {
  * Returns a string representation of a vector v by calling String(v)
  * or v.toString(). This method is useful for logging vectors in the
  * console.
- * @method  toString
- * @return {String}
  */
 Vector.prototype.toString = function vectorToString() {
   return `Vector Object : [${this.x}, ${this.y}, ${this.z}]`;
@@ -37,16 +35,6 @@ Vector.prototype.toString = function vectorToString() {
 
 /**
  * Sets the x, y, and z component of the vector using two or three separate
- * @method set
- * @param {Number} [x] the x component of the vector
- * @param {Number} [y] the y component of the vector
- * @param {Number} [z] the z component of the vector
- * @chainable
- */
-/**
- * @method set
- * @param {Vector|Number[]} value the vector to set
- * @chainable
  */
 Vector.prototype.set = function set(x, y, z) {
   if (x instanceof Vector) {
@@ -70,8 +58,6 @@ Vector.prototype.set = function set(x, y, z) {
 /**
  * Gets a copy of the vector, returns a <a href="#/Vector">Vector</a> object.
  *
- * @method copy
- * @return {Vector} the copy of the <a href="#/Vector">Vector</a> object
  */
 Vector.prototype.copy = function copy() {
   return new Vector(this.x, this.y, this.z);
@@ -84,15 +70,6 @@ Vector.prototype.copy = function copy() {
  * acts directly on the vector. Additionally, you may provide arguments to this function as an array.
  * See the examples for more context.
  *
- * @method add
- * @param  {Number | Vector} x   the x component of the vector to be added
- * @param  {Number | Vector} [y] the y component of the vector to be added
- * @param  {Number | Vector} [z] the z component of the vector to be added
- * @chainable
-/**
- * @method add
- * @param  {Vector|Number[]} value the vector to add
- * @chainable
  */
 Vector.prototype.add = function add(x, y, z) {
   if (x instanceof Vector) {
@@ -140,12 +117,6 @@ const calculateRemainder3D = function (xComponent, yComponent, zComponent) {
  * Gives remainder of a vector when it is divided by another vector.
  * See examples for more context.
  *
- * @method rem
- * @param {Number} x the x component of divisor vector
- * @param {Number} y the y component of divisor vector
- * @param {Number} z the z component of divisor vector
- * @chainable
- * @example
  * <div class='norender'>
  * <code>
  * let v = createVector(3, 4, 5);
@@ -165,11 +136,7 @@ const calculateRemainder3D = function (xComponent, yComponent, zComponent) {
  * </code>
  * </div>
  */
-/**
- * @method rem
- * @param {Vector | Number[]}  value  divisor vector
- * @chainable
- */
+
 Vector.prototype.rem = function rem(x, y, z) {
   if (x instanceof Vector) {
     if (Number.isFinite(x.x) && Number.isFinite(x.y) && Number.isFinite(x.z)) {
@@ -223,12 +190,6 @@ Vector.prototype.rem = function rem(x, y, z) {
  * other acts directly on the vector. Additionally, you may provide arguments to this function as an array.
  * See the examples for more context.
  *
- * @method sub
- * @param  {Number} x   the x component of the vector to subtract
- * @param  {Number} [y] the y component of the vector to subtract
- * @param  {Number} [z] the z component of the vector to subtract
- * @chainable
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(4, 5, 6);
@@ -293,11 +254,6 @@ Vector.prototype.rem = function rem(x, y, z) {
  * </code>
  * </div>
  */
-/**
- * @method sub
- * @param  {Vector|Number[]} value the vector to subtract
- * @chainable
- */
 Vector.prototype.sub = function sub(x, y, z) {
   if (x instanceof Vector) {
     this.x -= x.x || 0;
@@ -326,11 +282,6 @@ Vector.prototype.sub = function sub(x, y, z) {
  * creates a new <a href="#/p5.Vector">p5.Vector</a> while the non static version acts on the vector
  * directly. Additionally, you may provide arguments to this function as an array.
  * See the examples for more context.
- *
- * @method mult
- * @param  {Number} n The number to multiply with the vector
- * @chainable
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(1, 2, 3);
@@ -408,26 +359,6 @@ Vector.prototype.sub = function sub(x, y, z) {
  * }
  * </code>
  * </div>
- */
-
-/**
- * @method mult
- * @param  {Number} x The number to multiply with the x component of the vector
- * @param  {Number} y The number to multiply with the y component of the vector
- * @param  {Number} [z] The number to multiply with the z component of the vector
- * @chainable
- */
-
-/**
- * @method mult
- * @param  {Number[]} arr The array to multiply with the components of the vector
- * @chainable
- */
-
-/**
- * @method mult
- * @param  {Vector} v The vector to multiply with the components of the original vector
- * @chainable
  */
 
 Vector.prototype.mult = function mult(x, y, z) {
@@ -519,11 +450,6 @@ Vector.prototype.mult = function mult(x, y, z) {
  * new <a href="#/p5.Vector">p5.Vector</a> while the non static version acts on the vector directly.
  * Additionally, you may provide arguments to this function as an array.
  * See the examples for more context.
- *
- * @method div
- * @param  {number}    n The number to divide the vector by
- * @chainable
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(6, 4, 2);
@@ -602,25 +528,6 @@ Vector.prototype.mult = function mult(x, y, z) {
  * </div>
  */
 
-/**
- * @method div
- * @param  {Number} x The number to divide with the x component of the vector
- * @param  {Number} y The number to divide with the y component of the vector
- * @param  {Number} [z] The number to divide with the z component of the vector
- * @chainable
- */
-
-/**
- * @method div
- * @param  {Number[]} arr The array to divide the components of the vector by
- * @chainable
- */
-
-/**
- * @method div
- * @param  {Vector} v The vector to divide the components of the original vector by
- * @chainable
- */
 Vector.prototype.div = function div(x, y, z) {
   if (x instanceof Vector) {
     // new Vector will check that values are valid upon construction but it's possible
@@ -718,9 +625,6 @@ Vector.prototype.div = function div(x, y, z) {
  * Calculates the magnitude (length) of the vector and returns the result as
  * a float (this is simply the equation sqrt(x\*x + y\*y + z\*z).)
  *
- * @method mag
- * @return {Number} magnitude of the vector
- * @example
  * <div>
  * <code>
  * function draw() {
@@ -767,10 +671,6 @@ Vector.prototype.mag = function mag() {
  * as a float (this is simply the equation <em>(x\*x + y\*y + z\*z)</em>.)
  * Faster if the real length is not required in the
  * case of comparing vectors, etc.
- *
- * @method magSq
- * @return {number} squared magnitude of the vector
- * @example
  * <div class="norender">
  * <code>
  * // Static method
@@ -821,13 +721,6 @@ Vector.prototype.magSq = function magSq() {
  * that computes the dot product of two independent vectors is a static
  * method. See the examples for more context.
  *
- * @method dot
- * @param  {Number} x   x component of the vector
- * @param  {Number} [y] y component of the vector
- * @param  {Number} [z] z component of the vector
- * @return {Number}       the dot product
- *
- * @example
  * <div class="norender">
  * <code>
  * let v1 = createVector(1, 2, 3);
@@ -846,11 +739,7 @@ Vector.prototype.magSq = function magSq() {
  * </code>
  * </div>
  */
-/**
- * @method dot
- * @param  {Vector} value value component of the vector or a <a href="#/p5.Vector">p5.Vector</a>
- * @return {Number}
- */
+
 Vector.prototype.dot = function dot(x, y, z) {
   if (x instanceof Vector) {
     return this.dot(x.x, x.y, x.z);
@@ -863,10 +752,6 @@ Vector.prototype.dot = function dot(x, y, z) {
  * two vectors. Both the static and non static methods return a new <a href="#/p5.Vector">p5.Vector</a>.
  * See the examples for more context.
  *
- * @method cross
- * @param  {Vector} v <a href="#/p5.Vector">p5.Vector</a> to be crossed
- * @return {Vector}   <a href="#/p5.Vector">p5.Vector</a> composed of cross product
- * @example
  * <div class="norender">
  * <code>
  * let v1 = createVector(1, 2, 3);
@@ -901,10 +786,6 @@ Vector.prototype.cross = function cross(v) {
  * Calculates the Euclidean distance between two points (considering a
  * point as a vector object).
  *
- * @method dist
- * @param  {Vector} v the x, y, and z coordinates of a <a href="#/p5.Vector">p5.Vector</a>
- * @return {Number}      the distance
- * @example
  * <div class="norender">
  * <code>
  * let v1 = createVector(1, 0, 0);
@@ -968,9 +849,6 @@ Vector.prototype.dist = function dist(v) {
 /**
  * Normalize the vector to length 1 (make it a unit vector).
  *
- * @method normalize
- * @return {Vector} normalized <a href="#/p5.Vector">p5.Vector</a>
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(10, 20, 2);
@@ -1025,10 +903,6 @@ Vector.prototype.normalize = function normalize() {
  * Limit the magnitude of this vector to the value used for the <b>max</b>
  * parameter.
  *
- * @method limit
- * @param  {Number}    max the maximum magnitude for the vector
- * @chainable
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(10, 20, 2);
@@ -1083,10 +957,6 @@ Vector.prototype.limit = function limit(max) {
  * Set the magnitude of this vector to the value used for the <b>len</b>
  * parameter.
  *
- * @method setMag
- * @param  {number}    len the new length for this vector
- * @chainable
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(10, 20, 2);
@@ -1141,9 +1011,6 @@ Vector.prototype.setMag = function setMag(n) {
  * will take the current <a = src="#/p5/angleMode">angleMode</a> into consideration, and give the angle
  * in radians or degree accordingly.
  *
- * @method heading
- * @return {Number} the angle of rotation
- * @example
  * <div class = "norender">
  * <code>
  * function setup() {
@@ -1210,10 +1077,6 @@ Vector.prototype.heading = function heading() {
  * Rotate the vector by an angle (only 2D vectors), magnitude remains the
  * same
  *
- * @method rotate
- * @param  {number}    angle the angle of rotation
- * @chainable
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(10.0, 20.0);
@@ -1264,10 +1127,6 @@ Vector.prototype.rotate = function rotate(a) {
 
 /**
  * Calculates and returns the angle (in radians) between two vectors.
- * @method angleBetween
- * @param  {Vector}    value the x, y, and z components of a <a href="#/p5.Vector">p5.Vector</a>
- * @return {Number}       the angle between (in radians)
- * @example
  * <div class="norender">
  * <code>
  * let v1 = createVector(1, 0, 0);
@@ -1341,16 +1200,6 @@ Vector.prototype.angleBetween = function angleBetween(v) {
 /**
  * Linear interpolate the vector to another vector
  *
- * @method lerp
- * @param  {Number}    x   the x component
- * @param  {Number}    y   the y component
- * @param  {Number}    z   the z component
- * @param  {Number}    amt the amount of interpolation; some value between 0.0
- *                         (old vector) and 1.0 (new vector). 0.9 is very near
- *                         the new vector. 0.5 is halfway in between.
- * @chainable
- *
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(1, 1, 0);
@@ -1411,12 +1260,6 @@ Vector.prototype.angleBetween = function angleBetween(v) {
  * </code>
  * </div>
  */
-/**
- * @method lerp
- * @param  {Vector} v   the <a href="#/p5.Vector">p5.Vector</a> to lerp to
- * @param  {Number}    amt
- * @chainable
- */
 Vector.prototype.lerp = function lerp(x, y, z, amt) {
   if (x instanceof Vector) {
     return this.lerp(x.x, x.y, x.z, y);
@@ -1431,10 +1274,6 @@ Vector.prototype.lerp = function lerp(x, y, z, amt) {
  * Reflect the incoming vector about a normal to a line in 2D, or about a normal to a plane in 3D
  * This method acts on the vector directly
  *
- * @method reflect
- * @param  {Vector} surfaceNormal   the <a href="#/p5.Vector">p5.Vector</a> to reflect about, will be normalized by this method
- * @chainable
- * @example
  * <div class="norender">
  * <code>
  * let v = createVector(4, 6); // incoming vector, this example vector is heading to the right and downward
@@ -1488,9 +1327,6 @@ Vector.prototype.reflect = function reflect(surfaceNormal) {
  * copied by using the <b>p5.Vector.<a href="#/p5.Vector/copy">copy()</a></b> method to copy into your own
  * array.
  *
- * @method array
- * @return {Number[]} an Array with the 3 values
- * @example
  * <div class = "norender">
  * <code>
  * function setup() {
@@ -1517,12 +1353,6 @@ Vector.prototype.array = function array() {
 /**
  * Equality check against a <a href="#/p5.Vector">p5.Vector</a>
  *
- * @method equals
- * @param {Number} [x] the x component of the vector
- * @param {Number} [y] the y component of the vector
- * @param {Number} [z] the z component of the vector
- * @return {Boolean} whether the vectors are equals
- * @example
  * <div class = "norender">
  * <code>
  * let v1 = createVector(5, 10, 20);
@@ -1543,11 +1373,6 @@ Vector.prototype.array = function array() {
  * print(v1.equals(v3)); // false
  * </code>
  * </div>
- */
-/**
- * @method equals
- * @param {Vector|Array} value the vector to compare
- * @return {Boolean}
  */
 Vector.prototype.equals = function equals(x, y, z) {
   let a, b, c;
@@ -1590,12 +1415,6 @@ Vector.prototype.transformMat4 = function (mat) {
 /**
  * Make a new 2D vector from an angle
  *
- * @method fromAngle
- * @static
- * @param {Number}     angle the desired angle, in radians (unaffected by <a href="#/p5/angleMode">angleMode</a>)
- * @param {Number}     [length] the length of the new vector (defaults to 1)
- * @return {Vector}       the new <a href="#/p5.Vector">p5.Vector</a> object
- * @example
  * <div>
  * <code>
  * function draw() {
@@ -1641,14 +1460,6 @@ Vector.fromAngle = function fromAngle(angle, length) {
 /**
  * Make a new 3D vector from a pair of ISO spherical angles
  *
- * @method fromAngles
- * @static
- * @param {Number}     theta    the polar angle, in radians (zero is up)
- * @param {Number}     phi      the azimuthal angle, in radians
- *                               (zero is out of the screen)
- * @param {Number}     [length] the length of the new vector (defaults to 1)
- * @return {Vector}          the new <a href="#/p5.Vector">p5.Vector</a> object
- * @example
  * <div modernizr='webgl'>
  * <code>
  * function setup() {
@@ -1686,10 +1497,6 @@ Vector.fromAngles = function (theta, phi, length) {
 /**
  * Make a new 2D unit vector from a random angle
  *
- * @method random2D
- * @static
- * @return {Vector} the new <a href="#/p5.Vector">p5.Vector</a> object
- * @example
  * <div class="norender">
  * <code>
  * let v = p5.Vector.random2D();
@@ -1739,10 +1546,6 @@ Vector.random2D = function random2D() {
 /**
  * Make a new random 3D unit vector.
  *
- * @method random3D
- * @static
- * @return {Vector} the new <a href="#/p5.Vector">p5.Vector</a> object
- * @example
  * <div class="norender">
  * <code>
  * let v = p5.Vector.random3D();
@@ -1764,14 +1567,6 @@ Vector.random3D = function random3D() {
 };
 
 // Adds two vectors together and returns a new one.
-/**
- * @method add
- * @static
- * @param  {Vector} v1 a <a href="#/p5.Vector">p5.Vector</a> to add
- * @param  {Vector} v2 a <a href="#/p5.Vector">p5.Vector</a> to add
- * @param  {Vector} [target] the vector to receive the result (Optional)
- * @return {Vector} the resulting <a href="#/p5.Vector">p5.Vector</a>
- */
 
 Vector.add = function add(v1, v2, target) {
   if (!target) {
@@ -1787,19 +1582,7 @@ Vector.add = function add(v1, v2, target) {
 };
 
 // Returns a vector remainder when it is divided by another vector
-/**
- * @method rem
- * @static
- * @param  {Vector} v1 dividend <a href="#/p5.Vector">p5.Vector</a>
- * @param  {Vector} v2 divisor <a href="#/p5.Vector">p5.Vector</a>
- */
-/**
- * @method rem
- * @static
- * @param  {Vector} v1
- * @param  {Vector} v2
- * @return {Vector} the resulting <a href="#/p5.Vector">p5.Vector</a>
- */
+
 Vector.rem = function rem(v1, v2) {
   if (v1 instanceof Vector && v2 instanceof Vector) {
     let target = v1.copy();
@@ -1812,14 +1595,7 @@ Vector.rem = function rem(v1, v2) {
  * Subtracts one <a href="#/p5.Vector">p5.Vector</a> from another and returns a new one.  The second
  * vector (v2) is subtracted from the first (v1), resulting in v1-v2.
  */
-/**
- * @method sub
- * @static
- * @param  {Vector} v1 a <a href="#/p5.Vector">p5.Vector</a> to subtract from
- * @param  {Vector} v2 a <a href="#/p5.Vector">p5.Vector</a> to subtract
- * @param  {Vector} [target] the vector to receive the result (Optional)
- * @return {Vector} the resulting <a href="#/p5.Vector">p5.Vector</a>
- */
+
 
 Vector.sub = function sub(v1, v2, target) {
   if (!target) {
@@ -1841,38 +1617,6 @@ Vector.sub = function sub(v1, v2, target) {
  * Multiplies a vector by a scalar and returns a new vector.
  */
 
-/**
- * @method mult
- * @static
- * @param  {Number} x
- * @param  {Number} y
- * @param  {Number} [z]
- * @return {Vector} The resulting new <a href="#/p5.Vector">p5.Vector</a>
- */
-
-/**
- * @method mult
- * @static
- * @param  {Vector} v
- * @param  {Number}  n
- * @param  {Vector} [target] the vector to receive the result (Optional)
- */
-
-/**
- * @method mult
- * @static
- * @param  {Vector} v0
- * @param  {Vector} v1
- * @param  {Vector} [target]
- */
-
-/**
- * @method mult
- * @static
- * @param  {Vector} v0
- * @param  {Number[]} arr
- * @param  {Vector} [target]
- */
 Vector.mult = function mult(v, n, target) {
   if (!target) {
     target = v.copy();
@@ -1890,38 +1634,6 @@ Vector.mult = function mult(v, n, target) {
  * Divides a vector by a scalar and returns a new vector.
  */
 
-/**
- * @method div
- * @static
- * @param  {Number} x
- * @param  {Number} y
- * @param  {Number} [z]
- * @return {Vector} The resulting new <a href="#/p5.Vector">p5.Vector</a>
- */
-
-/**
- * @method div
- * @static
- * @param  {Vector} v
- * @param  {Number}  n
- * @param  {Vector} [target] the vector to receive the result (Optional)
- */
-
-/**
- * @method div
- * @static
- * @param  {Vector} v0
- * @param  {Vector} v1
- * @param  {Vector} [target]
- */
-
-/**
- * @method div
- * @static
- * @param  {Vector} v0
- * @param  {Number[]} arr
- * @param  {Vector} [target]
- */
 Vector.div = function div(v, n, target) {
   if (!target) {
     target = v.copy();
@@ -1939,13 +1651,7 @@ Vector.div = function div(v, n, target) {
 /**
  * Calculates the dot product of two vectors.
  */
-/**
- * @method dot
- * @static
- * @param  {Vector} v1 the first <a href="#/p5.Vector">p5.Vector</a>
- * @param  {Vector} v2 the second <a href="#/p5.Vector">p5.Vector</a>
- * @return {Number}     the dot product
- */
+
 Vector.dot = function dot(v1, v2) {
   return v1.dot(v2);
 };
@@ -1953,13 +1659,7 @@ Vector.dot = function dot(v1, v2) {
 /**
  * Calculates the cross product of two vectors.
  */
-/**
- * @method cross
- * @static
- * @param  {Vector} v1 the first <a href="#/p5.Vector">p5.Vector</a>
- * @param  {Vector} v2 the second <a href="#/p5.Vector">p5.Vector</a>
- * @return {Number}     the cross product
- */
+
 Vector.cross = function cross(v1, v2) {
   return v1.cross(v2);
 };
@@ -1968,13 +1668,7 @@ Vector.cross = function cross(v1, v2) {
  * Calculates the Euclidean distance between two points (considering a
  * point as a vector object).
  */
-/**
- * @method dist
- * @static
- * @param  {Vector} v1 the first <a href="#/p5.Vector">p5.Vector</a>
- * @param  {Vector} v2 the second <a href="#/p5.Vector">p5.Vector</a>
- * @return {Number}     the distance
- */
+
 Vector.dist = function dist(v1, v2) {
   return v1.dist(v2);
 };
@@ -1983,15 +1677,7 @@ Vector.dist = function dist(v1, v2) {
  * Linear interpolate a vector to another vector and return the result as a
  * new vector.
  */
-/**
- * @method lerp
- * @static
- * @param {Vector} v1
- * @param {Vector} v2
- * @param {Number} amt
- * @param {Vector} [target] the vector to receive the result (Optional)
- * @return {Vector}      the lerped value
- */
+
 Vector.lerp = function lerp(v1, v2, amt, target) {
   if (!target) {
     target = v1.copy();
@@ -2005,12 +1691,6 @@ Vector.lerp = function lerp(v1, v2, amt, target) {
   return target;
 };
 
-/**
- * @method mag
- * @param {Vector} vecT the vector to return the magnitude of
- * @return {Number}        the magnitude of vecT
- * @static
- */
 Vector.mag = function mag(vecT) {
   const x = vecT.x,
     y = vecT.y,

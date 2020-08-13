@@ -29,7 +29,7 @@ export const Home = () => {
         align: 'center'
       })
       const boids = new BoidsManager(canvas, {
-        count: 20,
+        count: 100,
         size: 4.0,
         cohesionValue: 1,
         alignmentValue: 0.3,

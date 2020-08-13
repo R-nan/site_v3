@@ -34,7 +34,7 @@ export default class BoidsManager {
 
   protected draw() {
     this.boids.forEach(boid => {
-      boid.update();
+      boid.update(this.boids);
     })
   }
 }

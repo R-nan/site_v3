@@ -28,6 +28,7 @@ export interface IBoid {
   cohesionValue: number;
   alignmentValue: number;
   separationValue: number;
+  size: number;
 }
 
 export type TPathType = 'm' | 'l' | 'q' | 'c';
