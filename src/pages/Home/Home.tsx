@@ -28,25 +28,24 @@ export const Home = () => {
         font: Italiana,
         align: 'center'
       })
-      const boids = new BoidsManager(canvas, {
-        count: 100,
-        size: 4.0,
-        cohesionValue: 1,
-        alignmentValue: 0.3,
-        separationValue: 1,
-        maxForce: 0.2,
-        maxSpeed: 7
-      })
-      fontRendererRef.current = fontRenderer;
-      boidsRef.current = boids;
       canvas.init();
       fontRenderer.init();
-      boids.init();
+      
+      fontRenderer.getFontVectors().then((fontVectors) => {
+        const boids = new BoidsManager(canvas, {
+          count: 100,
+          initialPositions: fontVectors(),
+        })
+        boids.init();
+        fontRendererRef.current = fontRenderer;
+        boidsRef.current = boids;
+      });
     }
   }, [canvas])
 
   const handleClick = useCallback(() => {
-    fontRendererRef.current.changeColor({r: 40, g: 100, b:2})
+    // fontRendererRef.current.changeColor({r: 40, g: 100, b:2})
+    console.log(fontRendererRef.current)
   }, [])
 
   return (

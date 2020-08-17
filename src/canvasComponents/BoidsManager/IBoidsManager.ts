@@ -3,12 +3,7 @@ import Vector from "../../utils/Vector";
 
 export interface IBoidsManagerOptions {
   count: number;
-  size: number;
-  cohesionValue: number;
-  alignmentValue: number;
-  separationValue: number;
-  maxForce: number; // 0.2
-  maxSpeed: number; // 7
+  initialPositions: Vector[][];
 }
 
 export interface IBoidShape {

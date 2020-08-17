@@ -118,8 +118,6 @@ export default class Boid {
     if (position.x < 0) {
       position.x = this.canvas.width;
     } else if (position.x >= this.canvas.width) {
-      console.log("this happne? right")
-
       position.x = 0;
     }
 

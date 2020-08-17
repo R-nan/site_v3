@@ -3,6 +3,8 @@ import * as FontPathRenderer from 'fontpath-canvas';
 import { IFontRendererOptions, IAnimatedValues } from "./IFontRenderer";
 import gsap from 'gsap';
 import IColor from "../../interface/IColor";
+import decomposeToVectors from "../../utils/decomposeToVectors";
+import Vector from "../../utils/Vector";
 
 export default class FontRenderer {
   private canvasManager: CanvasManager;
@@ -11,6 +13,7 @@ export default class FontRenderer {
   private context: CanvasRenderingContext2D;
   private renderer: any;
   private animatedValues: IAnimatedValues;
+  public fontVectors: Vector[][] = [];
 
   constructor(canvasManager: CanvasManager, options: IFontRendererOptions) {
     this.canvasManager = canvasManager;
@@ -29,6 +32,17 @@ export default class FontRenderer {
     this.renderer.layout(this.canvas.width);
 
     this.setup();
+  }
+
+  public getFontVectors(): Promise<any> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(() => {
+          this.fontVectors = this.buildFontVectors();
+          return this.fontVectors;
+        });
+      }, 10)
+    })
   }
 
   public setup(): void {
@@ -57,7 +71,25 @@ export default class FontRenderer {
     this.canvasManager.modifiers.push(this.draw.bind(this ));
   }
 
-  public changeColor(color: IColor) {
+  private buildFontVectors(): Array<Array<Vector>> {
+    let letterVectors: Array<Array<Vector>> = [];
+
+    this.renderer.data.glyphs.forEach((glyphData: any) => {
+      let gData = glyphData;
+      let glyph = gData.glyph,
+        scale = gData.scale[0],
+        px = gData.position[0],
+        py = gData.position[1];
+        let decomposedGlyphVectors = decomposeToVectors(glyph, scale, px, py);
+        if (decomposedGlyphVectors) {
+          letterVectors = [...letterVectors, ...decomposedGlyphVectors as any];
+        }
+    });
+
+    return letterVectors;
+  }
+
+  public changeColor(color: IColor): void {
     const {r, g, b, a} = color;
     gsap.to(
       this.animatedValues.color, 
@@ -66,7 +98,7 @@ export default class FontRenderer {
     );
   }
 
-  public draw() {
+  public draw(): void {
     const bounds = this.renderer.getBounds();
     //center the text in the window
     const x = (window.innerWidth - bounds.width) / 2,

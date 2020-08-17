@@ -2,6 +2,7 @@ import CanvasManager from "../CanvasManager/CanvasManager";
 import { IBoidsManagerOptions, IBoid } from "./IBoidsManager";
 import Boid from "./Boid";
 import Vector from "../../utils/Vector";
+import { randomInArray } from "../../utils/random";
 // import { IAnimatedValues } from "../FontRenderer/IFontRenderer";
 
 export default class BoidsManager {
@@ -24,10 +25,25 @@ export default class BoidsManager {
 
 
   public init() {
-    const { count, maxForce, maxSpeed, cohesionValue, alignmentValue, separationValue } = this.options;
-
+    const { count, initialPositions} = this.options;
+    
     for( let i = 0; i < count; i++) {
-      this.boids.push(new Boid(this.canvas, this.context))
+      const randomLetterVector = randomInArray(initialPositions);
+      this.boids.push(new Boid(
+        this.canvas, 
+        this.context,
+        {
+          position: randomLetterVector,
+          velocity: Vector.random2D(),
+          acceleration: new Vector(),
+          maxSpeed: 7,
+          maxForce: 0.2,
+          cohesionValue: 1,
+          alignmentValue: 0.3,
+          separationValue: 1,
+          size: 4,
+        }
+      ))
     }
     this.canvasManager.modifiers.push(this.draw.bind(this));
   }
