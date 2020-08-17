@@ -5,6 +5,7 @@ import CanvasManager from '../../canvasComponents/CanvasManager/CanvasManager';
 import FontRenderer from '../../canvasComponents/FontRenderer/FontRenderer';
 import * as Italiana from '../../assets/fonts/italiana.js';
 import BoidsManager from '../../canvasComponents/BoidsManager/BoidsManager';
+import ShapeType from '../../canvasComponents/BoidsManager/ShapeType';
 
 export const Home = () => {
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
@@ -35,6 +36,7 @@ export const Home = () => {
         const boids = new BoidsManager(canvas, {
           count: 100,
           initialPositions: fontVectors(),
+          boidShape: ShapeType.KITE
         })
         boids.init();
         fontRendererRef.current = fontRenderer;

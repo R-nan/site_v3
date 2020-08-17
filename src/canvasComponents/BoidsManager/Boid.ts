@@ -1,6 +1,8 @@
 import { IBoid } from "./IBoidsManager";
 import Vector from "../../utils/Vector";
 import { random } from "../../utils/random";
+import ShapeType from "./ShapeType";
+import buildCanvasPaths from "../../utils/buildCanvasPaths";
 
 export default class Boid {
   private canvas: HTMLCanvasElement;
@@ -20,6 +22,7 @@ export default class Boid {
       alignmentValue: 0.3,
       separationValue: 1,
       size: 4,
+      boidShape: ShapeType.KITE
     };
 
     this.setup();
@@ -161,17 +164,15 @@ export default class Boid {
   }
 
   protected draw(): void {
-    const { velocity, position } = this.options;
+    const { velocity, position, boidShape } = this.options;
     const theta = velocity.heading() - Math.PI / 2;
 
     this.context.fillStyle = 'black';
     this.context.save();
-    // this.context.translate(position.x, position.y);
-    // this.context.rotate(theta);
-    this.context.beginPath()
-    this.context.arc(position.x, position.y, 10, 0, Math.PI * 2, true);
+    this.context.translate(position.x, position.y);
+    this.context.rotate(theta);
+    buildCanvasPaths(this.context, boidShape(4), 2);
     this.context.fill();
-    this.context.closePath();
     this.context.restore();
   }
 }

@@ -1,9 +1,11 @@
 
 import Vector from "../../utils/Vector";
+import { IShapeData } from "../../utils/buildCanvasPaths";
 
 export interface IBoidsManagerOptions {
   count: number;
   initialPositions: Vector[][];
+  boidShape: (size: number) => IShapeData[];
 }
 
 export interface IBoidShape {
@@ -24,6 +26,7 @@ export interface IBoid {
   alignmentValue: number;
   separationValue: number;
   size: number;
+  boidShape: (size: number) => IShapeData[];
 }
 
 export type TPathType = 'm' | 'l' | 'q' | 'c';
