@@ -3,6 +3,7 @@ import { IBoidsManagerOptions, IBoid } from "./IBoidsManager";
 import Boid from "./Boid";
 import Vector from "../../utils/Vector";
 import { randomInArray } from "../../utils/random";
+import BoidStates from "./BoidStates";
 // import { IAnimatedValues } from "../FontRenderer/IFontRenderer";
 
 export default class BoidsManager {
@@ -22,10 +23,8 @@ export default class BoidsManager {
     // this.animatedValues = {}
   }
 
-
-
   public init() {
-    const { count, initialPositions, boidShape} = this.options;
+    const { count, initialPositions, boidShape, boidState} = this.options;
     
     for( let i = 0; i < count; i++) {
       const randomLetterVector = randomInArray(initialPositions);
@@ -42,11 +41,26 @@ export default class BoidsManager {
           alignmentValue: 0.3,
           separationValue: 1,
           size: 4,
-          boidShape
+          boidShape,
+          boidState,
         }
       ))
     }
     this.canvasManager.modifiers.push(this.draw.bind(this));
+  }
+
+  protected fold(): void {
+    // make fold animation
+  }
+
+  protected unfold(): void {
+    // make unfold animation
+  }
+
+  public release(): void {
+    this.boids.forEach(boid => {
+      boid.options.boidState = BoidStates.RELEASE;
+    })
   }
 
   protected draw() {

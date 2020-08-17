@@ -3,11 +3,13 @@ import Vector from "../../utils/Vector";
 import { random } from "../../utils/random";
 import ShapeType from "./ShapeType";
 import buildCanvasPaths from "../../utils/buildCanvasPaths";
+import BoidStates from "./BoidStates";
 
 export default class Boid {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
-  private options: IBoid;
+  public options: IBoid;
+  // public boidState: BoidState;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, options?: IBoid) {
     this.canvas = canvas;
@@ -22,7 +24,8 @@ export default class Boid {
       alignmentValue: 0.3,
       separationValue: 1,
       size: 4,
-      boidShape: ShapeType.KITE
+      boidShape: ShapeType.KITE,
+      boidState: BoidStates.REST,
     };
 
     this.setup();
@@ -134,10 +137,6 @@ export default class Boid {
   public flock(boids: Array<Boid>) {
     const {acceleration, alignmentValue, cohesionValue, separationValue, size} = this.options
     const perception = size * 50;
-    // if (this.goToOrigin) {
-    //   return this.returnToOrigin();
-    // } else {
-    // }
     const nearbyBoids = boids;
     acceleration.set(0, 0);
     let alignment = this.alignment(nearbyBoids, perception);
@@ -150,16 +149,11 @@ export default class Boid {
   }
 
   public update(boids: Array<Boid>): void {
-    const { velocity, position, acceleration, maxSpeed } = this.options;
+    this.options.boidState(this);
 
-    velocity.limit(maxSpeed);
-    velocity.add(acceleration);
-    position.add(velocity);
-    acceleration.mult(0, 0, 0);
-    
     this.flock(boids);
-    this.checkEdges()
 
+    this.checkEdges()
     this.draw();
   }
 

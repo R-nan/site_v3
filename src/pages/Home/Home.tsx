@@ -6,6 +6,7 @@ import FontRenderer from '../../canvasComponents/FontRenderer/FontRenderer';
 import * as Italiana from '../../assets/fonts/italiana.js';
 import BoidsManager from '../../canvasComponents/BoidsManager/BoidsManager';
 import ShapeType from '../../canvasComponents/BoidsManager/ShapeType';
+import BoidStates from '../../canvasComponents/BoidsManager/BoidStates';
 
 export const Home = () => {
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
@@ -36,7 +37,8 @@ export const Home = () => {
         const boids = new BoidsManager(canvas, {
           count: 100,
           initialPositions: fontVectors(),
-          boidShape: ShapeType.KITE
+          boidShape: ShapeType.KITE,
+          boidState: BoidStates.REST,
         })
         boids.init();
         fontRendererRef.current = fontRenderer;
@@ -47,7 +49,8 @@ export const Home = () => {
 
   const handleClick = useCallback(() => {
     // fontRendererRef.current.changeColor({r: 40, g: 100, b:2})
-    console.log(fontRendererRef.current)
+    // console.log(fontRendererRef.current)
+    boidsRef.current.release();
   }, [])
 
   return (
