@@ -12,7 +12,6 @@ export default class BoidsManager {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   private boids: Array<Boid>
-  // private animatedValues: IAnimatedValues;
 
   constructor(canvasManager: CanvasManager, options: IBoidsManagerOptions) {
     this.canvasManager = canvasManager;
@@ -20,7 +19,6 @@ export default class BoidsManager {
     this.canvas = this.canvasManager.canvas;
     this.context = this.canvasManager.context;
     this.boids = [];
-    // this.animatedValues = {}
   }
 
   public init() {
@@ -51,12 +49,16 @@ export default class BoidsManager {
   }
 
   protected fold(): void {
-    // make fold animation
+    this.boids.forEach(boid => {
+      boid.fold().then(() => {
+        boid.options.velocity = Vector.random2D();
+      });
+    })
   }
 
   protected unfold(): void {
     this.boids.forEach(boid => {
-      boid.options.velocity = Vector.random2D();
+      boid.unfold();
     })
   }
 

@@ -1,3 +1,4 @@
+import gsap from 'gsap';
 import { IBoid } from "./IBoidsManager";
 import Vector from "../../utils/Vector";
 import { random } from "../../utils/random";
@@ -34,6 +35,38 @@ export default class Boid {
     const { velocity } = this.options;
 
     velocity.setMag(random(0.5, 5.5));
+  }
+
+  public unfold(): Promise<any> {
+    return new Promise((resolve) => {
+      gsap.to(this.options.boidShape[1], 1, {
+        x: -2,
+        ease: 'power2.in'
+      })
+      gsap.to(this.options.boidShape[3], 1, {
+        x: 2,
+        ease: 'power2.in',
+        onComplete: () => {
+          resolve();
+        }
+      })
+    })
+  }
+
+  public fold(): Promise<any> {
+    return new Promise((resolve) => {
+      gsap.to(this.options.boidShape[1], 1, {
+        x: 0,
+        ease: 'power2.in'
+      })
+      gsap.to(this.options.boidShape[3], 1, {
+        x: 0,
+        ease: 'power2.in',
+        onComplete: () => {
+          resolve();
+        }
+      })
+    })
   }
 
   protected separation(boids: Array<Boid>, perception: number): Vector {
@@ -148,7 +181,7 @@ export default class Boid {
   }
 
   public update(boids: Array<Boid>): void {
-    this.options.boidState(this, boids);
+    this.options.boidState(this);
     this.flock(boids);
     this.checkEdges()
     this.draw();
@@ -162,7 +195,7 @@ export default class Boid {
     this.context.save();
     this.context.translate(position.x, position.y);
     this.context.rotate(theta);
-    buildCanvasPaths(this.context, boidShape(4), 2);
+    buildCanvasPaths(this.context, boidShape, 4);
     this.context.fill();
     this.context.restore();
   }

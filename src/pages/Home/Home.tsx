@@ -35,7 +35,7 @@ export const Home = () => {
       
       fontRenderer.getFontVectors().then((fontVectors) => {
         const boids = new BoidsManager(canvas, {
-          count: 1,
+          count: 100,
           initialPositions: fontVectors(),
           boidShape: ShapeType.KITE,
           boidState: BoidStates.REST,
@@ -69,12 +69,17 @@ export const Home = () => {
     boidsRef.current.unfold();
   }, [])
 
+  const handleOnFold = useCallback(() => {
+    boidsRef.current.fold();
+  }, [])
+
   return (
     <StyledHome>
       <button onClick={handleOnRest}>Rest</button>
       <button onClick={handleOnRelease}>Release</button>
       <button onClick={handleOnRoost}>Roost</button>
       <button onClick={handleOnUnfold}>Unfold</button>
+      <button onClick={handleOnFold}>Fold</button>
 
       <CanvasElement ref={canvasRef} id={'boids'}/>
     </StyledHome>

@@ -1,30 +1,28 @@
 import { IShapeData, PathType } from "../../utils/buildCanvasPaths";
 
-const ShapeType = {
-  KITE: (size: number): IShapeData[] => {
-    return [
-      {
-        pathType: PathType.MOVETO,
-        x: 0,
-        y: -size * 2
-      },
-      {
-        pathType: PathType.LINETO,
-        x: -size * 2,
-        y: size * 2
-      },
-      {
-        pathType: PathType.LINETO,
-        x: 0,
-        y: size * 4
-      },
-      {
-        pathType: PathType.LINETO,
-        x: size * 2,
-        y: size * 2
-      }
-    ]
-  }
+const ShapeType: {[key: string]: IShapeData[]} = {
+  KITE: [
+    {
+      pathType: PathType.MOVETO,
+      x: 0,
+      y: -2
+    },
+    {
+      pathType: PathType.LINETO,
+      x: 0, //open state = -2
+      y: 2
+    },
+    {
+      pathType: PathType.LINETO,
+      x: 0,
+      y: 4
+    },
+    {
+      pathType: PathType.LINETO,
+      x: 0, // open state = 2,
+      y: 2
+    }
+  ]
 };
 
 export default ShapeType;

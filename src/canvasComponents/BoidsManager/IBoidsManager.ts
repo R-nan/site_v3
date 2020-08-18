@@ -6,8 +6,8 @@ import Boid from "./Boid";
 export interface IBoidsManagerOptions {
   count: number;
   initialPositions: Vector[][];
-  boidShape: (size: number) => IShapeData[];
-  boidState: (boid: Boid, boids: Boid[]) => void;
+  boidShape: IShapeData[];
+  boidState: (boid: Boid) => void;
 }
 
 export interface IBoidShape {
@@ -28,8 +28,8 @@ export interface IBoid {
   alignmentValue: number;
   separationValue: number;
   size: number;
-  boidShape: (size: number) => IShapeData[];
-  boidState: (boid: Boid, boids: Boid[]) => void;
+  boidShape: IShapeData[];
+  boidState: (boid: Boid) => void;
 }
 
 export type TPathType = 'm' | 'l' | 'q' | 'c';
