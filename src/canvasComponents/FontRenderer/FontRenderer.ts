@@ -41,7 +41,7 @@ export default class FontRenderer {
           this.fontVectors = this.buildFontVectors();
           return this.fontVectors;
         });
-      }, 10)
+      }, 100)
     })
   }
 

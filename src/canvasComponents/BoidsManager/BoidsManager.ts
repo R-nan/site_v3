@@ -33,6 +33,7 @@ export default class BoidsManager {
         this.context,
         {
           position: randomLetterVector,
+          initialPosition: randomLetterVector.copy(),
           velocity: Vector.random2D(),
           acceleration: new Vector(),
           maxSpeed: 7,
@@ -54,12 +55,26 @@ export default class BoidsManager {
   }
 
   protected unfold(): void {
-    // make unfold animation
+    this.boids.forEach(boid => {
+      boid.options.velocity = Vector.random2D();
+    })
+  }
+
+  public roost(): void {
+    this.boids.forEach(boid => {
+      boid.options.boidState = BoidStates.ROOST;
+    })
   }
 
   public release(): void {
     this.boids.forEach(boid => {
       boid.options.boidState = BoidStates.RELEASE;
+    })
+  }
+
+  public rest(): void {
+    this.boids.forEach(boid => {
+      boid.options.boidState = BoidStates.REST;
     })
   }
 

@@ -7,7 +7,7 @@ export interface IBoidsManagerOptions {
   count: number;
   initialPositions: Vector[][];
   boidShape: (size: number) => IShapeData[];
-  boidState: (boid: Boid) => void;
+  boidState: (boid: Boid, boids: Boid[]) => void;
 }
 
 export interface IBoidShape {
@@ -29,7 +29,7 @@ export interface IBoid {
   separationValue: number;
   size: number;
   boidShape: (size: number) => IShapeData[];
-  boidState: (boid: Boid) => void;
+  boidState: (boid: Boid, boids: Boid[]) => void;
 }
 
 export type TPathType = 'm' | 'l' | 'q' | 'c';

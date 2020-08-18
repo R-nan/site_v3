@@ -9,7 +9,6 @@ export default class Boid {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   public options: IBoid;
-  // public boidState: BoidState;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, options?: IBoid) {
     this.canvas = canvas;
@@ -149,10 +148,8 @@ export default class Boid {
   }
 
   public update(boids: Array<Boid>): void {
-    this.options.boidState(this);
-
+    this.options.boidState(this, boids);
     this.flock(boids);
-
     this.checkEdges()
     this.draw();
   }
