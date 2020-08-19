@@ -1,10 +1,9 @@
 import CanvasManager from "../CanvasManager/CanvasManager";
-import { IBoidsManagerOptions, IBoid } from "./IBoidsManager";
+import { IBoidsManagerOptions } from "./IBoidsManager";
 import Boid from "./Boid";
 import Vector from "../../utils/Vector";
 import { randomInArray } from "../../utils/random";
 import BoidStates from "./BoidStates";
-// import { IAnimatedValues } from "../FontRenderer/IFontRenderer";
 
 export default class BoidsManager {
   private canvasManager: CanvasManager;
@@ -48,7 +47,7 @@ export default class BoidsManager {
     this.canvasManager.modifiers.push(this.draw.bind(this));
   }
 
-  protected fold(): void {
+  public fold(): void {
     this.boids.forEach(boid => {
       boid.fold().then(() => {
         boid.options.velocity = Vector.random2D();
@@ -56,15 +55,22 @@ export default class BoidsManager {
     })
   }
 
-  protected unfold(): void {
+  public unfold(): void {
     this.boids.forEach(boid => {
       boid.unfold();
     })
   }
 
-  public roost(): void {
-    this.boids.forEach(boid => {
-      boid.options.boidState = BoidStates.ROOST;
+  public roost(): Promise<any> {
+    return new Promise((resolve) => {
+      this.boids.forEach(boid => {
+        boid.options.boidState = BoidStates.ROOST;
+      })
+      Promise.all(this.boids.map((boid) => boid.buildFlyToPromise()
+      .then(() => boid.options.boidState = BoidStates.REST)))
+      .then(() => {
+        resolve();
+      })
     })
   }
 

@@ -1,3 +1,4 @@
+import gsap from 'gsap';
 import React, { createRef, RefObject, useEffect, useState, useRef, useCallback } from 'react';
 import { StyledHome } from './styled';
 import CanvasElement from '../../components/CanvasElement';
@@ -13,6 +14,23 @@ export const Home = () => {
   const [canvas, setCanvas] = useState<CanvasManager | null>(null);
   const fontRendererRef = useRef<any | null>(null);
   const boidsRef = useRef<any | null>(null);
+  const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 5});
+
+  const setupMainLoop = (boids: BoidsManager, fontRenderer: FontRenderer) => {
+    mainLoop
+    .call(() => {
+      fontRenderer.changeColor({r:255, g:255, b:255, a:1})
+      boids.unfold();
+    }, [],2)
+    .call(() => boids.release(), [], '+=2')
+    .call(() => {
+      boids.roost().then(() => {
+        boids.fold();
+        fontRenderer.changeColor({r: 0, g: 0, b:0, a: 1});
+      })
+    }, [], '+=5')
+  }
+
   useEffect(() => {
     const CanvasComponent = new CanvasManager(canvasRef.current as HTMLCanvasElement)
     setCanvas(CanvasComponent);
@@ -35,7 +53,7 @@ export const Home = () => {
       
       fontRenderer.getFontVectors().then((fontVectors) => {
         const boids = new BoidsManager(canvas, {
-          count: 100,
+          count: 10,
           initialPositions: fontVectors(),
           boidShape: ShapeType.KITE,
           boidState: BoidStates.REST,
@@ -43,6 +61,9 @@ export const Home = () => {
         boids.init();
         fontRendererRef.current = fontRenderer;
         boidsRef.current = boids;
+
+        setupMainLoop(boidsRef.current, fontRendererRef.current)
+        mainLoop.play();
       });
     }
   }, [canvas])
@@ -75,11 +96,11 @@ export const Home = () => {
 
   return (
     <StyledHome>
-      <button onClick={handleOnRest}>Rest</button>
+      {/* <button onClick={handleOnRest}>Rest</button>
       <button onClick={handleOnRelease}>Release</button>
       <button onClick={handleOnRoost}>Roost</button>
       <button onClick={handleOnUnfold}>Unfold</button>
-      <button onClick={handleOnFold}>Fold</button>
+      <button onClick={handleOnFold}>Fold</button> */}
 
       <CanvasElement ref={canvasRef} id={'boids'}/>
     </StyledHome>

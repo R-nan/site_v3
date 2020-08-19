@@ -18,7 +18,7 @@ export interface IBoidShape {
 
 export interface IBoid {
   position: Vector;
-  initialPosition?: Vector;
+  initialPosition: Vector;
   velocity: Vector;
   initialVelocity?: Vector;
   acceleration: Vector;

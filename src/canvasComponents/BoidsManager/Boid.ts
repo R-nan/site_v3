@@ -5,17 +5,21 @@ import { random } from "../../utils/random";
 import ShapeType from "./ShapeType";
 import buildCanvasPaths from "../../utils/buildCanvasPaths";
 import BoidStates from "./BoidStates";
+import { map } from '../../utils/utils';
 
 export default class Boid {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   public options: IBoid;
+  public flyToResolver: any;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, options?: IBoid) {
     this.canvas = canvas;
     this.context = context;
+    this.flyToResolver = null;
     this.options = options || {
       position: new Vector(Math.random() * canvas.width, Math.random() * canvas.height),
+      initialPosition: Vector.random2D(),
       velocity: Vector.random2D(),
       acceleration: new Vector(),
       maxSpeed: 7,
@@ -69,6 +73,39 @@ export default class Boid {
     })
   }
 
+  public buildFlyToPromise(): Promise<any> {
+    return new Promise((resolve) => {
+      this.flyToResolver = resolve;
+    })
+  }
+
+  public flyTo(target: Vector): void {
+    const { position, velocity, acceleration, maxSpeed } = this.options;
+    const maxArrivalSpeed = 5;
+    const desired = Vector.sub(target, position);
+    const distance = desired.mag();
+    let speed = maxArrivalSpeed;
+
+    if (distance < 100) {
+      speed = map(distance, 0, 100, 0, maxArrivalSpeed);
+    }
+
+    if (distance <= 5 && this.flyToResolver) {
+      this.flyToResolver();
+      this.flyToResolver = null;
+    }
+
+    desired.setMag(speed);
+
+    const steer = Vector.sub(desired, velocity);
+
+    acceleration.add(steer);
+    velocity.limit(maxSpeed);
+    velocity.add(acceleration);
+    position.add(velocity);
+    acceleration.mult(0, 0, 0);
+  }
+
   protected separation(boids: Array<Boid>, perception: number): Vector {
     const { position, velocity, maxSpeed, maxForce } = this.options;
 
@@ -96,7 +133,6 @@ export default class Boid {
     }
     return steering;
   }
-
 
   protected alignment(boids: Array<Boid>, perception: number): Vector {
     const { position, velocity, maxSpeed, maxForce } = this.options;
