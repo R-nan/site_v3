@@ -94,7 +94,7 @@ export default class FontRenderer {
     gsap.to(
       this.animatedValues.color, 
       2, 
-      { r, g, b, a, ease: 'power2.out' }
+      { r, g, b, a, ease: 'power2.in' }
     );
   }
 

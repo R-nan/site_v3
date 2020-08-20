@@ -14,7 +14,7 @@ export const Home = () => {
   const [canvas, setCanvas] = useState<CanvasManager | null>(null);
   const fontRendererRef = useRef<any | null>(null);
   const boidsRef = useRef<any | null>(null);
-  const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 5});
+  const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 8});
 
   const setupMainLoop = (boids: BoidsManager, fontRenderer: FontRenderer) => {
     mainLoop
@@ -22,13 +22,13 @@ export const Home = () => {
       fontRenderer.changeColor({r:255, g:255, b:255, a:1})
       boids.unfold();
     }, [],2)
-    .call(() => boids.release(), [], '+=2')
+    .call(() => boids.release(), [], '+=3')
     .call(() => {
       boids.roost().then(() => {
         boids.fold();
         fontRenderer.changeColor({r: 0, g: 0, b:0, a: 1});
       })
-    }, [], '+=5')
+    }, [], '+=6')
   }
 
   useEffect(() => {

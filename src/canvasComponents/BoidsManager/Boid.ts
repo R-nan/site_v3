@@ -43,11 +43,11 @@ export default class Boid {
 
   public unfold(): Promise<any> {
     return new Promise((resolve) => {
-      gsap.to(this.options.boidShape[1], 1, {
+      gsap.to(this.options.boidShape[1], 2, {
         x: -2,
         ease: 'power2.in'
       })
-      gsap.to(this.options.boidShape[3], 1, {
+      gsap.to(this.options.boidShape[3], 2, {
         x: 2,
         ease: 'power2.in',
         onComplete: () => {
@@ -59,11 +59,11 @@ export default class Boid {
 
   public fold(): Promise<any> {
     return new Promise((resolve) => {
-      gsap.to(this.options.boidShape[1], 1, {
+      gsap.to(this.options.boidShape[1], 2, {
         x: 0,
         ease: 'power2.in'
       })
-      gsap.to(this.options.boidShape[3], 1, {
+      gsap.to(this.options.boidShape[3], 2, {
         x: 0,
         ease: 'power2.in',
         onComplete: () => {
@@ -224,14 +224,14 @@ export default class Boid {
   }
 
   protected draw(): void {
-    const { velocity, position, boidShape } = this.options;
+    const { velocity, position, boidShape, maxSpeed } = this.options;
     const theta = velocity.heading() - Math.PI / 2;
 
     this.context.fillStyle = 'black';
     this.context.save();
     this.context.translate(position.x, position.y);
     this.context.rotate(theta);
-    buildCanvasPaths(this.context, boidShape, 4);
+    buildCanvasPaths(this.context, boidShape, (10 * (velocity.mag() / maxSpeed)) + 3);
     this.context.fill();
     this.context.restore();
   }
