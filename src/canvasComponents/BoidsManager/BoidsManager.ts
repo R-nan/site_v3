@@ -29,8 +29,9 @@ export default class BoidsManager {
         this.canvas, 
         this.context,
         {
-          position: randomLetterVector,
-          initialPosition: randomLetterVector.copy(),
+          position: randomLetterVector.value,
+          initialPosition: randomLetterVector.value.copy(),
+          initialPositionIndex: randomLetterVector.index,
           velocity: Vector.random2D(),
           acceleration: new Vector(),
           maxSpeed: 7,
@@ -45,6 +46,18 @@ export default class BoidsManager {
       ))
     }
     this.canvasManager.modifiers.push(this.draw.bind(this));
+  }
+
+  public onResize(initialPositions: {[key: string]: any}): void {
+    this.boids.forEach((boid, index) => {
+      const { initialPositionIndex } = boid.options;
+      boid.setValues({
+        position: initialPositions[initialPositionIndex],
+        initialPosition: initialPositions[initialPositionIndex].copy(),
+        velocity: Vector.random2D(),
+        acceleration: new Vector()
+      })
+    })
   }
 
   public fold(): void {

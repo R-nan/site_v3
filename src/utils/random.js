@@ -24,7 +24,10 @@ export const random = (min, max) => {
 export const randomInArray = (array) => {
   const randomIndex = random(0, array.length - 1);
 
-  return array[Math.floor(randomIndex)];
+  return {
+    value:array[Math.floor(randomIndex)],
+    index: Math.floor(randomIndex)
+  };
 };
 
 export default random;

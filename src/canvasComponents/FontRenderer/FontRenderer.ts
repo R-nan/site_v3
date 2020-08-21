@@ -27,7 +27,7 @@ export default class FontRenderer {
   public init(): void {
     this.renderer.text = this.options.text;
     this.renderer.font = this.options.font;
-    this.renderer.fontSize = this.canvas.width / 8;
+    this.renderer.fontSize = this.canvas.width < 768 ? this.canvas.width / 4 : this.canvas.width / 8;
     this.renderer.align = this.options.align;
     this.renderer.layout(this.canvas.width);
 
@@ -60,7 +60,7 @@ export default class FontRenderer {
 
     //draw the card background with some padding
     let pad = 20;
-    this.context.fillStyle = 'black';
+    this.context.fillStyle = 'white';
     this.context.fillRect(
       bounds.x + x - pad,
       bounds.y + y - pad,
@@ -68,6 +68,9 @@ export default class FontRenderer {
       pad * 2 + bounds.height + descender,
     );
 
+  }
+  
+  public addToCanvas(): void {
     this.canvasManager.modifiers.push(this.draw.bind(this ));
   }
 

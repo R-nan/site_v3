@@ -20,6 +20,7 @@ export default class Boid {
     this.options = options || {
       position: new Vector(Math.random() * canvas.width, Math.random() * canvas.height),
       initialPosition: Vector.random2D(),
+      initialPositionIndex: 0,
       velocity: Vector.random2D(),
       acceleration: new Vector(),
       maxSpeed: 7,
@@ -39,6 +40,12 @@ export default class Boid {
     const { velocity } = this.options;
 
     velocity.setMag(random(0.5, 5.5));
+  }
+
+  public setValues(values: any) {
+    Object.keys(values).map((key) => {
+      return this.options[key as keyof IBoid] = values[key];
+    })
   }
 
   public unfold(): Promise<any> {
