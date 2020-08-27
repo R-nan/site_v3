@@ -58,10 +58,11 @@ export const Home = () => {
       
       fontRenderer.getFontVectors().then((fontVectors) => {
         const boids = new BoidsManager(canvas, {
-          count: 2,
+          count: 200,
           initialPositions: fontVectors(),
           boidShape: ShapeType.KITE(),
           boidState: BoidStates.REST,
+          color: {r: 0, g: 0, b: 0, a: 1}
         })
 
         boids.init();
@@ -70,15 +71,21 @@ export const Home = () => {
 
         setupMainLoop(boidsRef.current, fontRendererRef.current)
         setupIntro();
-        // mainLoop.play();
       });
     }
   }, [canvas]);
 
+  const endIntro = useCallback(() => {
+    canvas?.changeColor({r: 255, g: 255, b: 255, a: 1}).then(() => {
+      introBoidsRef.current.fold();
+      mainLoop.play();
+    });
+    introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
+  }, [canvas, mainLoop])
+
   const playIntro = useCallback(() => {
-    if (!canvas) return;
-    introBoidsRef.current.flySequence();
-  }, [canvas])
+    introBoidsRef.current.flySequence().then(endIntro);
+  }, [endIntro])
 
   useResize(() => {
     if (canvas && boidsRef && fontRendererRef) {
@@ -130,6 +137,7 @@ export const Home = () => {
       boidState: BoidStates.REST,
       target: new Vector(0, 0),
       sequence: [...randomSequence, finalDestination],
+      color: {r: 255, g: 255, b: 255, a: 1}
     })
     introBoidsRef.current.init();
     introBoidsRef.current.unfold();

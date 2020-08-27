@@ -1,9 +1,11 @@
+import gsap from 'gsap';
 import CanvasManager from "../CanvasManager/CanvasManager";
 import { IBoidsManagerOptions } from "./IBoidsManager";
 import Boid from "./Boid";
 import Vector from "../../utils/Vector";
 import { randomInArray } from "../../utils/random";
 import BoidStates from "./BoidStates";
+import IColor from "../../interface/IColor";
 
 export default class BoidsManager {
   private canvasManager: CanvasManager;
@@ -25,7 +27,7 @@ export default class BoidsManager {
   }
 
   public init() {
-    const { count, initialPositions, boidShape, boidState, target, sequence} = this.options;
+    const { count, initialPositions, boidShape, boidState, target, sequence, color} = this.options;
 
     for( let i = 0; i < count; i++) {
       const randomLetterVector = randomInArray(initialPositions);
@@ -48,6 +50,7 @@ export default class BoidsManager {
           boidState,
           target,
           sequence,
+          color
         }
       ))
     }
@@ -129,6 +132,15 @@ export default class BoidsManager {
     this.boids.forEach(boid => {
       boid.options.boidState = BoidStates.REST;
     })
+  }
+
+  public changeColor(color: IColor): void {
+    const {r, g, b, a} = color;
+    gsap.to(
+      this.options.color, 
+      2, 
+      { r, g, b, a, ease: 'power2.in' }
+    );
   }
 
   protected draw() {

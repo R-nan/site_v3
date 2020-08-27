@@ -32,7 +32,8 @@ export default class Boid {
       boidShape: ShapeType.KITE(),
       boidState: BoidStates.REST,
       target: new Vector(0, 0),
-      sequence: [new Vector(100, 600), new Vector(300, 300), new Vector(400, 10)]
+      sequence: [new Vector(100, 600), new Vector(300, 300), new Vector(400, 10)],
+      color: {r: 255, g: 255, b: 255, a: 1}
     };
 
     this.setup();
@@ -235,8 +236,9 @@ export default class Boid {
   protected draw(): void {
     const { velocity, position, boidShape, maxSpeed } = this.options;
     const theta = velocity.heading() - Math.PI / 2;
+    const {r, g, b, a} = this.options.color;
 
-    this.context.fillStyle = 'black';
+    this.context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
     this.context.save();
     this.context.translate(position.x, position.y);
     this.context.rotate(theta);

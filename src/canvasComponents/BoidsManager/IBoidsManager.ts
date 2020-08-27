@@ -2,6 +2,7 @@
 import Vector from "../../utils/Vector";
 import { IShapeData } from "../../utils/buildCanvasPaths";
 import Boid from "./Boid";
+import IColor from "../../interface/IColor";
 
 export interface IBoidsManagerOptions {
   count: number;
@@ -10,6 +11,7 @@ export interface IBoidsManagerOptions {
   boidState: (boid: Boid) => void;
   target?: Vector;
   sequence?: Vector[];
+  color: IColor;
 }
 
 export interface IBoidShape {
@@ -35,6 +37,7 @@ export interface IBoid {
   boidState: (boid: Boid) => void;
   target?: Vector;
   sequence?: Vector[];
+  color: IColor;
 }
 
 export type TPathType = 'm' | 'l' | 'q' | 'c';
