@@ -1,3 +1,5 @@
+import Vector from "./Vector";
+
 export const random = (min, max) => {
   let rand;
   rand = Math.random();
@@ -29,5 +31,14 @@ export const randomInArray = (array) => {
     index: Math.floor(randomIndex)
   };
 };
+
+export const randomVectorsPositions = (width, height, count) => {
+  let positions = [];
+  for (let i = 0; i < count; i++) {
+    positions.push(new Vector(Math.random() * width, Math.random() * height));
+  }
+
+  return positions;
+}
 
 export default random;

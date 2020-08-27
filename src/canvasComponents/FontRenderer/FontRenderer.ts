@@ -13,6 +13,7 @@ export default class FontRenderer {
   private context: CanvasRenderingContext2D;
   private renderer: any;
   private animatedValues: IAnimatedValues;
+  public glyphs: any = {};
   public fontVectors: Vector[][] = [];
 
   constructor(canvasManager: CanvasManager, options: IFontRendererOptions) {
@@ -84,6 +85,7 @@ export default class FontRenderer {
         px = gData.position[0],
         py = gData.position[1];
         let decomposedGlyphVectors = decomposeToVectors(glyph, scale, px, py);
+        this.glyphs[glyphData.charCode] = decomposedGlyphVectors;
         if (decomposedGlyphVectors) {
           letterVectors = [...letterVectors, ...decomposedGlyphVectors as any];
         }

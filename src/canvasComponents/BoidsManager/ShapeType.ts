@@ -1,7 +1,8 @@
 import { IShapeData, PathType } from "../../utils/buildCanvasPaths";
 
-const ShapeType: {[key: string]: IShapeData[]} = {
-  KITE: [
+const ShapeType: {[key: string]: () => IShapeData[]} = {
+  KITE: () => {
+    return [
     {
       pathType: PathType.MOVETO,
       x: 0,
@@ -23,6 +24,7 @@ const ShapeType: {[key: string]: IShapeData[]} = {
       y: 2
     }
   ]
+}
 };
 
 export default ShapeType;

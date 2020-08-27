@@ -8,6 +8,8 @@ export interface IBoidsManagerOptions {
   initialPositions: Vector[][];
   boidShape: IShapeData[];
   boidState: (boid: Boid) => void;
+  target?: Vector;
+  sequence?: Vector[];
 }
 
 export interface IBoidShape {
@@ -31,6 +33,8 @@ export interface IBoid {
   size: number;
   boidShape: IShapeData[];
   boidState: (boid: Boid) => void;
+  target?: Vector;
+  sequence?: Vector[];
 }
 
 export type TPathType = 'm' | 'l' | 'q' | 'c';

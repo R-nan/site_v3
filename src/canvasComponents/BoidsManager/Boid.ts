@@ -29,8 +29,10 @@ export default class Boid {
       alignmentValue: 0.3,
       separationValue: 1,
       size: 4,
-      boidShape: ShapeType.KITE,
+      boidShape: ShapeType.KITE(),
       boidState: BoidStates.REST,
+      target: new Vector(0, 0),
+      sequence: [new Vector(100, 600), new Vector(300, 300), new Vector(400, 10)]
     };
 
     this.setup();

@@ -14,8 +14,12 @@ const BoidStates = {
     const { initialPosition } = boid.options;
 
     boid.flyTo(initialPosition);
-    // once it arrives to origin point, set boid state to rest, 
-    // once all boids are at origin, resolve promise.all and fold boid;
+  },
+  FLY_SEQUENCE: (boid: Boid) => {
+    const { target } = boid.options;
+
+    if (target) boid.flyTo(target);
+
   }
 }
 

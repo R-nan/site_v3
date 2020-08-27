@@ -11,6 +11,8 @@ export default class BoidsManager {
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   private boids: Array<Boid>
+  private sequenceCounter: number;
+  private sequencePromiseResolver: any;
 
   constructor(canvasManager: CanvasManager, options: IBoidsManagerOptions) {
     this.canvasManager = canvasManager;
@@ -18,11 +20,13 @@ export default class BoidsManager {
     this.canvas = this.canvasManager.canvas;
     this.context = this.canvasManager.context;
     this.boids = [];
+    this.sequenceCounter = 0;
+    this.sequencePromiseResolver = null;
   }
 
   public init() {
-    const { count, initialPositions, boidShape, boidState} = this.options;
-    
+    const { count, initialPositions, boidShape, boidState, target, sequence} = this.options;
+
     for( let i = 0; i < count; i++) {
       const randomLetterVector = randomInArray(initialPositions);
       this.boids.push(new Boid(
@@ -42,6 +46,8 @@ export default class BoidsManager {
           size: 4,
           boidShape,
           boidState,
+          target,
+          sequence,
         }
       ))
     }
@@ -83,6 +89,32 @@ export default class BoidsManager {
       .then(() => boid.options.boidState = BoidStates.REST)))
       .then(() => {
         resolve();
+      })
+    })
+  }
+
+  protected flySequenceCounter(boid: Boid): void {
+    boid.buildFlyToPromise().then(() => {
+      if (!boid.options.sequence) return;
+      if (this.options.sequence && this.sequenceCounter >= this.options.sequence.length) {
+        this.sequencePromiseResolver();
+        return this.sequencePromiseResolver = null;
+      };
+
+      boid.options.target = boid.options.sequence[this.sequenceCounter++];
+      this.flySequenceCounter(boid);
+    })
+  }
+
+  public flySequence(): Promise<any> {
+    return new Promise((resolve) => {
+      this.sequencePromiseResolver = resolve;
+      this.boids.forEach(boid => {
+        if(boid.options.sequence) {
+          boid.options.target = boid.options.sequence[this.sequenceCounter];
+          boid.options.boidState = BoidStates.FLY_SEQUENCE;
+          this.flySequenceCounter(boid)
+        }
       })
     })
   }
