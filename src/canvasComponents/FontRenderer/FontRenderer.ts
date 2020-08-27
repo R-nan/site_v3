@@ -89,6 +89,11 @@ export default class FontRenderer {
         if (decomposedGlyphVectors) {
           letterVectors = [...letterVectors, ...decomposedGlyphVectors as any];
         }
+
+        // take out dot in letter 'i'
+        if(glyphData.charCode === 105) {
+          glyphData.glyph.path.splice(13, 9);
+        }
     });
 
     return letterVectors;
