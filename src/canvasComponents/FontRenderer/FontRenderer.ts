@@ -91,9 +91,9 @@ export default class FontRenderer {
         }
 
         // take out dot in letter 'i'
-        if(glyphData.charCode === 105) {
-          glyphData.glyph.path.splice(13, 9);
-        }
+        // if(glyphData.charCode === 105) {
+        //   glyphData.glyph.path.splice(13, 9);
+        // }
     });
 
     return letterVectors;
