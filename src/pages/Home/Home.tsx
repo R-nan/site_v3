@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import React, { createRef, RefObject, useEffect, useState, useRef, useCallback } from 'react';
-import { StyledHome } from './styled';
+import { StyledHome, ButtonContainer, Link } from './styled';
 import CanvasElement from '../../components/CanvasElement';
 import CanvasManager from '../../canvasComponents/CanvasManager/CanvasManager';
 import FontRenderer from '../../canvasComponents/FontRenderer/FontRenderer';
@@ -12,6 +12,11 @@ import { useResize } from '../../hooks/useResize';
 import Vector from '../../utils/Vector';
 import { randomVectorsPositions } from '../../utils/random';
 import IColor from '../../interface/IColor';
+import { ReactComponent as IconMail } from '../../assets/svg/mail.svg';
+import { ReactComponent as IconGithub } from '../../assets/svg/github.svg';
+import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
+
+
 
 export const Home = () => {
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
@@ -20,8 +25,8 @@ export const Home = () => {
   const boidsRef = useRef<any | null>(null);
   const introBoidsRef = useRef<any | null>(null);
   const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 8});
-  const boidColor: IColor = {r: 255, g: 0, b: 0, a: 1};
-
+  const boidColor: IColor = {r: 220, g: 20, b: 60, a: 1};
+  const buttonContainerRef = useRef<any | null>(null);
   const setupMainLoop = useCallback((boids: BoidsManager, fontRenderer: FontRenderer) => {
     mainLoop
     .call(() => {
@@ -37,13 +42,19 @@ export const Home = () => {
     }, [], '+=6');
   }, [mainLoop]);
 
+  const changeButtonColor = useCallback(() => {
+    const buttonContainerElement = buttonContainerRef.current;
+    gsap.to(buttonContainerElement, {opacity: 1, duration: 2, delay: 0.5, ease: 'power.in'})
+  }, [])
+
   const endIntro = useCallback(() => {
     canvas?.changeColor({r: 255, g: 255, b: 255, a: 1}).then(() => {
       introBoidsRef.current.fold();
+      changeButtonColor()
       mainLoop.play();
     });
     // introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
-  }, [canvas, mainLoop])
+  }, [canvas, changeButtonColor, mainLoop])
 
   const playIntro = useCallback(() => {
     introBoidsRef.current.flySequence().then(endIntro);
@@ -98,7 +109,7 @@ export const Home = () => {
       
       fontRenderer.getFontVectors().then((fontVectors) => {
         const boids = new BoidsManager(canvas, {
-          count: 200,
+          count: 100,
           size: canvas.canvas.width / 250,
           initialPositions: fontVectors(),
           boidShape: ShapeType.KITE(),
@@ -154,13 +165,24 @@ export const Home = () => {
 
   return (
     <StyledHome>
-      {/* <button onClick={handleOnRest}>Rest</button> */}
+      {/* <button onClick={test}>Ref</button> */}
       {/* <button onClick={handleOnRelease}>Release</button> */}
       {/* <button onClick={handleOnRoost}>Roost</button> */}
       {/* <button onClick={handleOnUnfold}>Unfold</button> */}
       {/* <button onClick={handleOnFold}>Fold</button> */}
 
       <CanvasElement ref={canvasRef} id={'boids'}/>
+      <ButtonContainer ref={buttonContainerRef}>
+        <Link href="https://github.com/R-nan" target="_blank">
+         <IconGithub />
+        </Link>
+        <Link >
+          <IconLinkedIn />
+        </Link>
+        <Link href="mailto:anthony.r.lui@gmail.com" target="_blank">
+          <IconMail/>
+        </Link>
+      </ButtonContainer>
     </StyledHome>
   )
 };

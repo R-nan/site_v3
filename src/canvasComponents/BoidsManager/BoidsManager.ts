@@ -45,7 +45,7 @@ export default class BoidsManager {
           cohesionValue: 1,
           alignmentValue: 0.3,
           separationValue: 1,
-          size,
+          size: this.canvas.width < 768 ? size * 2 : size,
           boidShape,
           boidState,
           target,
@@ -59,12 +59,13 @@ export default class BoidsManager {
 
   public onResize(initialPositions: {[key: string]: any}): void {
     this.boids.forEach((boid, index) => {
-      const { initialPositionIndex } = boid.options;
+      const { initialPositionIndex, size } = boid.options;
       boid.setValues({
         position: initialPositions[initialPositionIndex],
         initialPosition: initialPositions[initialPositionIndex].copy(),
         velocity: Vector.random2D(),
-        acceleration: new Vector()
+        acceleration: new Vector(),
+        size: this.canvas.width < 768 ? size * 2 : size,
       })
     })
   }

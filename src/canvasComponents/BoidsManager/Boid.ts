@@ -113,7 +113,7 @@ export default class Boid {
     position.add(velocity);
     acceleration.mult(0);
 
-    if (distance <= 2 && this.flyToResolver) {
+    if (distance <= 10 && this.flyToResolver) {
       this.flyToResolver();
       this.flyToResolver = null;
     }
