@@ -11,6 +11,7 @@ import BoidStates from '../../canvasComponents/BoidsManager/BoidStates';
 import { useResize } from '../../hooks/useResize';
 import Vector from '../../utils/Vector';
 import { randomVectorsPositions } from '../../utils/random';
+import IColor from '../../interface/IColor';
 
 export const Home = () => {
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
@@ -19,6 +20,7 @@ export const Home = () => {
   const boidsRef = useRef<any | null>(null);
   const introBoidsRef = useRef<any | null>(null);
   const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 8});
+  const boidColor: IColor = {r: 255, g: 0, b: 0, a: 1};
 
   const setupMainLoop = useCallback((boids: BoidsManager, fontRenderer: FontRenderer) => {
     mainLoop
@@ -40,7 +42,7 @@ export const Home = () => {
       introBoidsRef.current.fold();
       mainLoop.play();
     });
-    introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
+    // introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
   }, [canvas, mainLoop])
 
   const playIntro = useCallback(() => {
@@ -57,11 +59,12 @@ export const Home = () => {
     introBoidsRef.current = new BoidsManager(canvas, {
       count:1,
       initialPositions: [randomVector],
+      size: canvas.canvas.width / 250,
       boidShape: ShapeType.KITE(),
       boidState: BoidStates.REST,
       target: new Vector(0, 0),
-      sequence: [...randomSequence, finalDestination],
-      color: {r: 255, g: 255, b: 255, a: 1}
+      sequence: [...randomSequence, new Vector(finalDestination.x, finalDestination.y + 200), finalDestination],
+      color: {...boidColor}
     })
     introBoidsRef.current.init();
     introBoidsRef.current.unfold();
@@ -70,7 +73,7 @@ export const Home = () => {
       playIntro();
     }, 4000)
 
-  }, [canvas, playIntro])
+  }, [boidColor, canvas, playIntro])
 
   useEffect(() => {
     const CanvasComponent = new CanvasManager(canvasRef.current as HTMLCanvasElement)
@@ -96,10 +99,11 @@ export const Home = () => {
       fontRenderer.getFontVectors().then((fontVectors) => {
         const boids = new BoidsManager(canvas, {
           count: 200,
+          size: canvas.canvas.width / 250,
           initialPositions: fontVectors(),
           boidShape: ShapeType.KITE(),
           boidState: BoidStates.REST,
-          color: {r: 0, g: 0, b: 0, a: 1}
+          color: {...boidColor}
         })
 
         boids.init();
@@ -110,7 +114,7 @@ export const Home = () => {
         setupIntro();
       });
     }
-  }, [canvas, setupIntro, setupMainLoop]);
+  }, [boidColor, canvas, setupIntro, setupMainLoop]);
 
   useResize(() => {
     if (canvas && boidsRef && fontRendererRef) {

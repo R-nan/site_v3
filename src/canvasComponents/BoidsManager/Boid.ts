@@ -244,7 +244,7 @@ export default class Boid {
     this.context.save();
     this.context.translate(position.x, position.y);
     this.context.rotate(theta);
-    buildCanvasPaths(this.context, boidShape, (10 * (velocity.mag() / maxSpeed)) + 3);
+    buildCanvasPaths(this.context, boidShape, (10 * (velocity.mag() / maxSpeed)) + this.options.size);
     this.context.fill();
     this.context.restore();
   }

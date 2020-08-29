@@ -27,7 +27,7 @@ export default class BoidsManager {
   }
 
   public init() {
-    const { count, initialPositions, boidShape, boidState, target, sequence, color} = this.options;
+    const { count, initialPositions, boidShape, boidState, target, sequence, color, size} = this.options;
 
     for( let i = 0; i < count; i++) {
       const randomLetterVector = randomInArray(initialPositions);
@@ -45,7 +45,7 @@ export default class BoidsManager {
           cohesionValue: 1,
           alignmentValue: 0.3,
           separationValue: 1,
-          size: 4,
+          size,
           boidShape,
           boidState,
           target,

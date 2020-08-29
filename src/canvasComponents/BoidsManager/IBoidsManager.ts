@@ -12,6 +12,7 @@ export interface IBoidsManagerOptions {
   target?: Vector;
   sequence?: Vector[];
   color: IColor;
+  size: number;
 }
 
 export interface IBoidShape {
