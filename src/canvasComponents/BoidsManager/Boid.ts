@@ -90,30 +90,33 @@ export default class Boid {
   }
 
   public flyTo(target: Vector): void {
-    const { position, velocity, acceleration, maxSpeed } = this.options;
+    const { position, velocity, acceleration, maxSpeed, maxForce } = this.options;
     const maxArrivalSpeed = 5;
-    const desired = Vector.sub(target, position);
-    const distance = desired.mag();
+    const desired: Vector = Vector.sub(target, position);
+    const distance: number = desired.mag();
+    desired.normalize();
+
     let speed = maxArrivalSpeed;
 
-    if (distance < 100) {
-      speed = map(distance, 0, 100, 0, maxArrivalSpeed);
+    if (distance < 200) {
+      speed = map(distance, 0, 200, 0, maxArrivalSpeed);
+      desired.mult(speed);
+    } else {
+      desired.mult(maxSpeed);
     }
-
-    if (distance <= 5 && this.flyToResolver) {
-      this.flyToResolver();
-      this.flyToResolver = null;
-    }
-
-    desired.setMag(speed);
 
     const steer = Vector.sub(desired, velocity);
-
+    steer.limit(maxForce)
     acceleration.add(steer);
     velocity.limit(maxSpeed);
     velocity.add(acceleration);
     position.add(velocity);
-    acceleration.mult(0, 0, 0);
+    acceleration.mult(0);
+
+    if (Math.round(distance) <= 5 && this.flyToResolver) {
+      this.flyToResolver();
+      this.flyToResolver = null;
+    }
   }
 
   protected separation(boids: Array<Boid>, perception: number): Vector {

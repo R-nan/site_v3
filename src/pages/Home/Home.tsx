@@ -40,7 +40,7 @@ export const Home = () => {
       introBoidsRef.current.fold();
       mainLoop.play();
     });
-    // introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
+    introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
   }, [canvas, mainLoop])
 
   const playIntro = useCallback(() => {
