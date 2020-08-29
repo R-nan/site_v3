@@ -165,18 +165,12 @@ export const Home = () => {
 
   return (
     <StyledHome>
-      {/* <button onClick={test}>Ref</button> */}
-      {/* <button onClick={handleOnRelease}>Release</button> */}
-      {/* <button onClick={handleOnRoost}>Roost</button> */}
-      {/* <button onClick={handleOnUnfold}>Unfold</button> */}
-      {/* <button onClick={handleOnFold}>Fold</button> */}
-
       <CanvasElement ref={canvasRef} id={'boids'}/>
       <ButtonContainer ref={buttonContainerRef}>
         <Link href="https://github.com/R-nan" target="_blank">
          <IconGithub />
         </Link>
-        <Link >
+        <Link href="https://www.linkedin.com/in/anthonylui/" target="_blank">
           <IconLinkedIn />
         </Link>
         <Link href="mailto:anthony.r.lui@gmail.com" target="_blank">
