@@ -113,7 +113,7 @@ export default class Boid {
     position.add(velocity);
     acceleration.mult(0);
 
-    if (Math.round(distance) <= 5 && this.flyToResolver) {
+    if (distance <= 2 && this.flyToResolver) {
       this.flyToResolver();
       this.flyToResolver = null;
     }
@@ -230,8 +230,7 @@ export default class Boid {
   }
 
   public update(boids: Array<Boid>): void {
-    this.options.boidState(this);
-    this.flock(boids);
+    this.options.boidState(this, boids);
     this.checkEdges()
     this.draw();
   }

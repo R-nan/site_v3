@@ -2,9 +2,9 @@ import Boid from "./Boid";
 
 const BoidStates = {
   REST: (boid: Boid) => {},
-  RELEASE: (boid: Boid) => {
+  RELEASE: (boid: Boid, boids: Boid[]) => {
     const { velocity, position, acceleration, maxSpeed } = boid.options;
-
+    boid.flock(boids);
     velocity.limit(maxSpeed);
     velocity.add(acceleration);
     position.add(velocity);

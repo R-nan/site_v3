@@ -8,7 +8,7 @@ export interface IBoidsManagerOptions {
   count: number;
   initialPositions: Vector[][];
   boidShape: IShapeData[];
-  boidState: (boid: Boid) => void;
+  boidState: (boid: Boid, boids: Boid[]) => void;
   target?: Vector;
   sequence?: Vector[];
   color: IColor;
@@ -34,7 +34,7 @@ export interface IBoid {
   separationValue: number;
   size: number;
   boidShape: IShapeData[];
-  boidState: (boid: Boid) => void;
+  boidState: (boid: Boid, boids: Boid[]) => void;
   target?: Vector;
   sequence?: Vector[];
   color: IColor;
