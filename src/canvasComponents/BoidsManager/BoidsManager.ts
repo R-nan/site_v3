@@ -65,7 +65,7 @@ export default class BoidsManager {
         initialPosition: initialPositions[initialPositionIndex].copy(),
         velocity: Vector.random2D(),
         acceleration: new Vector(),
-        size: this.canvas.width < 768 ? size * 2 : size,
+        size,
       })
     })
   }

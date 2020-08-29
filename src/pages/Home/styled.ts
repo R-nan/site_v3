@@ -1,8 +1,6 @@
 import styled from 'styled-components/macro';
 
-export const StyledHome = styled.div`
-  background: rgba(220, 20, 60);
-`;
+export const StyledHome = styled.div``;
 
 export const ButtonContainer = styled.div`
   position: absolute;

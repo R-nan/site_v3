@@ -138,8 +138,6 @@ export const Home = () => {
   });
 
   const handleClick = useCallback(() => {
-    // fontRendererRef.current.changeColor({r: 40, g: 100, b:2})
-    // console.log(fontRendererRef.current)
     boidsRef.current.release();
   }, []);
 
