@@ -53,7 +53,7 @@ export default class CanvasManager {
     this.context.clearRect(0, 0, width, height);
     this.context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
     this.context.fillRect(0, 0, width, height);
-    this.modifiers.slice(0).reverse().map(modifier => modifier());
+    this.modifiers.map(modifier => modifier());
     this.requestId = window.requestAnimationFrame(() => this.update());
   }
 

@@ -17,7 +17,6 @@ import { ReactComponent as IconGithub } from '../../assets/svg/github.svg';
 import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
 
 
-
 export const Home = () => {
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
   const [canvas, setCanvas] = useState<CanvasManager | null>(null);
@@ -53,20 +52,21 @@ export const Home = () => {
       changeButtonColor()
       mainLoop.play();
     });
-    // introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
+    introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
   }, [canvas, changeButtonColor, mainLoop])
 
   const playIntro = useCallback(() => {
-    introBoidsRef.current.flySequence().then(endIntro);
+    introBoidsRef.current.flySequence().then(setTimeout(endIntro, 6000));
   }, [endIntro])
 
   const setupIntro = useCallback(() => {
     if (!canvas) return;
 
     const glyph_I = fontRendererRef.current.glyphs['105']
-    const finalDestination = glyph_I[glyph_I.length - 3]
+    const finalDestination = glyph_I[glyph_I.length - 4]
     const randomSequence = randomVectorsPositions(canvas.canvas.width, canvas.canvas.height, 1);
     const randomVector: any = new Vector((Math.random() * canvas.canvas.width), (Math.random() * canvas.canvas.height));
+
     introBoidsRef.current = new BoidsManager(canvas, {
       count:1,
       initialPositions: [randomVector],
@@ -75,14 +75,20 @@ export const Home = () => {
       boidState: BoidStates.REST,
       target: new Vector(0, 0),
       sequence: [...randomSequence, new Vector(finalDestination.x, finalDestination.y + 200), finalDestination],
-      color: {...boidColor}
+      color: {...boidColor},
+      maxSpeed: 10,
+      showTrail: true,
+      distanceToResolve: 50
     })
+
+    introBoidsRef.current.addToCanvas(1);
+
     introBoidsRef.current.init();
     introBoidsRef.current.unfold();
 
     setTimeout(() => {
       playIntro();
-    }, 4000)
+    }, 2500)
 
   }, [boidColor, canvas, playIntro])
 
@@ -121,9 +127,12 @@ export const Home = () => {
         fontRendererRef.current = fontRenderer;
         boidsRef.current = boids;
 
+        boids.addToCanvas(0);
+        
         setupMainLoop(boidsRef.current, fontRendererRef.current)
         setupIntro();
       });
+
     }
   }, [boidColor, canvas, setupIntro, setupMainLoop]);
 

@@ -13,6 +13,9 @@ export interface IBoidsManagerOptions {
   sequence?: Vector[];
   color: IColor;
   size: number;
+  maxSpeed?: number;
+  showTrail?: boolean;
+  distanceToResolve?: number;
 }
 
 export interface IBoidShape {
@@ -38,7 +41,9 @@ export interface IBoid {
   boidState: (boid: Boid, boids: Boid[]) => void;
   target?: Vector;
   sequence?: Vector[];
+  showTrail?: number | boolean;
   color: IColor;
+  distanceToResolve?: number;
 }
 
 export type TPathType = 'm' | 'l' | 'q' | 'c';

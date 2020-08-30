@@ -27,7 +27,19 @@ export default class BoidsManager {
   }
 
   public init() {
-    const { count, initialPositions, boidShape, boidState, target, sequence, color, size} = this.options;
+    const { 
+      count, 
+      initialPositions, 
+      boidShape, 
+      boidState, 
+      target, 
+      sequence, 
+      color, 
+      size, 
+      maxSpeed,
+      showTrail,
+      distanceToResolve
+    } = this.options;
 
     for( let i = 0; i < count; i++) {
       const randomLetterVector = randomInArray(initialPositions);
@@ -40,7 +52,7 @@ export default class BoidsManager {
           initialPositionIndex: randomLetterVector.index,
           velocity: Vector.random2D(),
           acceleration: new Vector(),
-          maxSpeed: 7,
+          maxSpeed: maxSpeed ? maxSpeed :  7,
           maxForce: 0.2,
           cohesionValue: 1,
           alignmentValue: 0.3,
@@ -50,11 +62,16 @@ export default class BoidsManager {
           boidState,
           target,
           sequence,
-          color
+          color,
+          showTrail,
+          distanceToResolve
         }
       ))
     }
-    this.canvasManager.modifiers.push(this.draw.bind(this));
+  }
+  
+  public addToCanvas(index: number): void {
+    this.canvasManager.modifiers.splice(index, 0, this.draw.bind(this))
   }
 
   public onResize(initialPositions: {[key: string]: any}): void {

@@ -12,6 +12,7 @@ export default class Boid {
   private context: CanvasRenderingContext2D;
   public options: IBoid;
   public flyToResolver: any;
+  private trailHistory: Vector[];
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, options?: IBoid) {
     this.canvas = canvas;
@@ -33,8 +34,9 @@ export default class Boid {
       boidState: BoidStates.REST,
       target: new Vector(0, 0),
       sequence: [new Vector(100, 600), new Vector(300, 300), new Vector(400, 10)],
-      color: {r: 255, g: 255, b: 255, a: 1}
+      color: {r: 255, g: 255, b: 255, a: 1},
     };
+    this.trailHistory = [];
 
     this.setup();
   }
@@ -90,7 +92,7 @@ export default class Boid {
   }
 
   public flyTo(target: Vector): void {
-    const { position, velocity, acceleration, maxSpeed, maxForce } = this.options;
+    const { position, velocity, acceleration, maxSpeed, maxForce, distanceToResolve } = this.options;
     const maxArrivalSpeed = 5;
     const desired: Vector = Vector.sub(target, position);
     const distance: number = desired.mag();
@@ -113,7 +115,7 @@ export default class Boid {
     position.add(velocity);
     acceleration.mult(0);
 
-    if (distance <= 10 && this.flyToResolver) {
+    if (distance <= (distanceToResolve ? distanceToResolve : 10) && this.flyToResolver) {
       this.flyToResolver();
       this.flyToResolver = null;
     }
@@ -229,18 +231,50 @@ export default class Boid {
     acceleration.add(separation.mult(separationValue));
   }
 
+  private drawTrail(currentPosition: Vector): void {
+    this.trailHistory.push(currentPosition.copy());
+
+    if (this.trailHistory.length > 100) {
+      this.trailHistory.splice(0, 1);
+    }
+
+    this.context.strokeStyle = "white";
+    this.context.beginPath();
+    // this.context.setLineDash([5, 15]);
+
+    for(let i = 0; i < this.trailHistory.length; i++) {
+      let position = this.trailHistory[i];
+
+      if (i === 0) {
+        this.context.moveTo(position.x, position.y);
+      } else {
+        this.context.lineTo(position.x, position.y)
+      }
+    }
+    // this.context.closePath();
+    this.context.stroke();
+  }
+
   public update(boids: Array<Boid>): void {
     this.options.boidState(this, boids);
     this.checkEdges()
     this.draw();
+    // console.log(this.options.position)
+
+    // this.trailHistory.push(this.options.position);
+    // if (this.trailHistory.length > 100) {
+    //   this.trailHistory.splice(0, 1);
+    // }
+    // console.log(this.trailHistory)
   }
 
   protected draw(): void {
-    const { velocity, position, boidShape, maxSpeed } = this.options;
+    const { velocity, position, boidShape, maxSpeed, showTrail } = this.options;
     const theta = velocity.heading() - Math.PI / 2;
     const {r, g, b, a} = this.options.color;
 
     this.context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+    if (showTrail) this.drawTrail(position);
     this.context.save();
     this.context.translate(position.x, position.y);
     this.context.rotate(theta);
