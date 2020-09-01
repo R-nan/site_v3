@@ -15,7 +15,7 @@ import IColor from '../../interface/IColor';
 import { ReactComponent as IconMail } from '../../assets/svg/mail.svg';
 import { ReactComponent as IconGithub } from '../../assets/svg/github.svg';
 import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
-
+import BoidPath from '../../canvasComponents/BoidsManager/BoidPath';
 
 export const Home = () => {
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
@@ -55,42 +55,35 @@ export const Home = () => {
     introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
   }, [canvas, changeButtonColor, mainLoop])
 
-  const playIntro = useCallback(() => {
-    introBoidsRef.current.flySequence().then(setTimeout(endIntro, 6000));
-  }, [endIntro])
 
   const setupIntro = useCallback(() => {
     if (!canvas) return;
 
     const glyph_I = fontRendererRef.current.glyphs['105']
-    const finalDestination = glyph_I[glyph_I.length - 4]
+    const finalDestination = glyph_I[glyph_I.length - 3]
     const randomSequence = randomVectorsPositions(canvas.canvas.width, canvas.canvas.height, 1);
     const randomVector: any = new Vector((Math.random() * canvas.canvas.width), (Math.random() * canvas.canvas.height));
 
-    introBoidsRef.current = new BoidsManager(canvas, {
-      count:1,
-      initialPositions: [randomVector],
-      size: canvas.canvas.width / 250,
-      boidShape: ShapeType.KITE(),
-      boidState: BoidStates.REST,
-      target: new Vector(0, 0),
-      sequence: [...randomSequence, new Vector(finalDestination.x, finalDestination.y + 200), finalDestination],
-      color: {...boidColor},
-      maxSpeed: 10,
-      showTrail: true,
-      distanceToResolve: 50
-    })
-
+    introBoidsRef.current = new BoidPath(
+      canvas,
+      {
+        position: randomVector,
+        size: canvas.canvas.width / 250,
+        shape: ShapeType.KITE(),
+        sequence: [randomVector, ...randomSequence, new Vector(finalDestination.x, finalDestination.y + 200), finalDestination],
+        color: {...boidColor},
+        angle: Math.PI * 2
+      }
+    )
     introBoidsRef.current.addToCanvas(1);
 
-    introBoidsRef.current.init();
     introBoidsRef.current.unfold();
 
     setTimeout(() => {
-      playIntro();
+      introBoidsRef.current.playSequence().then(endIntro)
     }, 2500)
 
-  }, [boidColor, canvas, playIntro])
+  }, [boidColor, canvas, endIntro])
 
   useEffect(() => {
     const CanvasComponent = new CanvasManager(canvasRef.current as HTMLCanvasElement)

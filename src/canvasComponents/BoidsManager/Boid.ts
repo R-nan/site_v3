@@ -259,13 +259,6 @@ export default class Boid {
     this.options.boidState(this, boids);
     this.checkEdges()
     this.draw();
-    // console.log(this.options.position)
-
-    // this.trailHistory.push(this.options.position);
-    // if (this.trailHistory.length > 100) {
-    //   this.trailHistory.splice(0, 1);
-    // }
-    // console.log(this.trailHistory)
   }
 
   protected draw(): void {
