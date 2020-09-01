@@ -41,21 +41,17 @@ export default class BoidPath {
     return new Promise((resolve) => {
       const {sequence} = this.options;
       const options = this.options;
-      let path = sequence.map((sequenceItem: any) => {
-        return {x: sequenceItem.x, y: sequenceItem.y};
-      })
-      let rawPath = MotionPathPlugin.arrayToRawPath(path, {curviness:1})
       let proxy = {value: 0};
   
-      MotionPathPlugin.cacheRawPathMeasurements(rawPath);
+      MotionPathPlugin.cacheRawPathMeasurements(sequence);
      
       gsap.to(proxy, {
         value: 1, 
-        duration: 5, 
-        ease: "power1.inOut",
+        duration: 10, 
+        ease: "power2.inOut",
         onUpdate() {
           const progress = proxy.value;
-          const pathData = MotionPathPlugin.getPositionOnPath(rawPath, progress, true);
+          const pathData = MotionPathPlugin.getPositionOnPath(sequence, progress, true);
   
           options.angle = (pathData as any).angle * (Math.PI/180);
           options.position = new Vector(pathData.x, pathData.y)

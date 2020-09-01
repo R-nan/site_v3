@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import React, { createRef, RefObject, useEffect, useState, useRef, useCallback } from 'react';
 import { StyledHome, ButtonContainer, Link } from './styled';
 import CanvasElement from '../../components/CanvasElement';
@@ -10,14 +11,16 @@ import ShapeType from '../../canvasComponents/BoidsManager/ShapeType';
 import BoidStates from '../../canvasComponents/BoidsManager/BoidStates';
 import { useResize } from '../../hooks/useResize';
 import Vector from '../../utils/Vector';
-import { randomVectorsPositions } from '../../utils/random';
 import IColor from '../../interface/IColor';
 import { ReactComponent as IconMail } from '../../assets/svg/mail.svg';
 import { ReactComponent as IconGithub } from '../../assets/svg/github.svg';
 import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
 import BoidPath from '../../canvasComponents/BoidsManager/BoidPath';
+import Signature from '../../data/Signature';
 
 export const Home = () => {
+  gsap.registerPlugin(MotionPathPlugin);
+
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
   const [canvas, setCanvas] = useState<CanvasManager | null>(null);
   const fontRendererRef = useRef<any | null>(null);
@@ -61,16 +64,20 @@ export const Home = () => {
 
     const glyph_I = fontRendererRef.current.glyphs['105']
     const finalDestination = glyph_I[glyph_I.length - 3]
-    const randomSequence = randomVectorsPositions(canvas.canvas.width, canvas.canvas.height, 1);
-    const randomVector: any = new Vector((Math.random() * canvas.canvas.width), (Math.random() * canvas.canvas.height));
+    // const randomSequence = randomVectorsPositions(canvas.canvas.width, canvas.canvas.height, 1);
+    const signatureSequence = MotionPathPlugin.stringToRawPath(Signature);
+    const endVectors = [new Vector(finalDestination.x, finalDestination.y + 200), finalDestination];
+    const rawPathEndVectors = MotionPathPlugin.arrayToRawPath(endVectors);
+
+    // const randomVector: any = new Vector((Math.random() * canvas.canvas.width), (Math.random() * canvas.canvas.height));
 
     introBoidsRef.current = new BoidPath(
       canvas,
       {
-        position: randomVector,
+        position: new Vector(signatureSequence[0][0], signatureSequence[0][1]),
         size: canvas.canvas.width / 250,
         shape: ShapeType.KITE(),
-        sequence: [randomVector, ...randomSequence, new Vector(finalDestination.x, finalDestination.y + 200), finalDestination],
+        sequence: [...signatureSequence, ...rawPathEndVectors],
         color: {...boidColor},
         angle: Math.PI * 2
       }
