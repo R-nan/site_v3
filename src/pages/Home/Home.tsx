@@ -16,7 +16,8 @@ import { ReactComponent as IconMail } from '../../assets/svg/mail.svg';
 import { ReactComponent as IconGithub } from '../../assets/svg/github.svg';
 import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
 import BoidPath from '../../canvasComponents/BoidsManager/BoidPath';
-import Signature from '../../data/Signature';
+import { SignatureDesktop } from '../../data/Signature';
+import centerRawPath from '../../utils/centerRawPath';
 
 export const Home = () => {
   gsap.registerPlugin(MotionPathPlugin);
@@ -64,20 +65,18 @@ export const Home = () => {
 
     const glyph_I = fontRendererRef.current.glyphs['105']
     const finalDestination = glyph_I[glyph_I.length - 3]
-    // const randomSequence = randomVectorsPositions(canvas.canvas.width, canvas.canvas.height, 1);
-    const signatureSequence = MotionPathPlugin.stringToRawPath(Signature);
+    const rawPathSignatureSequence = MotionPathPlugin.stringToRawPath(SignatureDesktop);
     const endVectors = [new Vector(finalDestination.x, finalDestination.y + 200), finalDestination];
     const rawPathEndVectors = MotionPathPlugin.arrayToRawPath(endVectors);
-
-    // const randomVector: any = new Vector((Math.random() * canvas.canvas.width), (Math.random() * canvas.canvas.height));
+    const centeredPath = centerRawPath(rawPathSignatureSequence, canvas.canvas.width, canvas.canvas.height, .6);
 
     introBoidsRef.current = new BoidPath(
       canvas,
       {
-        position: new Vector(signatureSequence[0][0], signatureSequence[0][1]),
+        position: new Vector(centeredPath[0][0], centeredPath[0][1]),
         size: canvas.canvas.width / 250,
         shape: ShapeType.KITE(),
-        sequence: [...signatureSequence, ...rawPathEndVectors],
+        sequence: [...centeredPath, ...rawPathEndVectors],
         color: {...boidColor},
         angle: Math.PI * 2
       }
