@@ -16,7 +16,7 @@ import { ReactComponent as IconMail } from '../../assets/svg/mail.svg';
 import { ReactComponent as IconGithub } from '../../assets/svg/github.svg';
 import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
 import BoidPath from '../../canvasComponents/BoidsManager/BoidPath';
-import { SignatureDesktop } from '../../data/Signature';
+import { SignatureDesktop, SignatureMobile } from '../../data/Signature';
 import centerRawPath from '../../utils/centerRawPath';
 
 export const Home = () => {
@@ -65,7 +65,7 @@ export const Home = () => {
 
     const glyph_I = fontRendererRef.current.glyphs['105']
     const finalDestination = glyph_I[glyph_I.length - 3]
-    const rawPathSignatureSequence = MotionPathPlugin.stringToRawPath(SignatureDesktop);
+    const rawPathSignatureSequence = MotionPathPlugin.stringToRawPath(canvas.canvas.width < 768 ? SignatureMobile : SignatureDesktop);
     const endVectors = [new Vector(finalDestination.x, finalDestination.y + 200), finalDestination];
     const rawPathEndVectors = MotionPathPlugin.arrayToRawPath(endVectors);
     const centeredPath = centerRawPath(rawPathSignatureSequence, canvas.canvas.width, canvas.canvas.height, .6);
