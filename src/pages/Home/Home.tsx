@@ -19,6 +19,9 @@ import BoidPath from '../../canvasComponents/BoidsManager/BoidPath';
 import { SignatureDesktop, SignatureMobile } from '../../data/Signature';
 import centerRawPath from '../../utils/centerRawPath';
 
+export const colorOffWhite: IColor = {r: 255, g: 242, b: 227, a: 1};
+export const colorBlack: IColor = {r: 42, g: 59, b: 61, a: 1};
+
 export const Home = () => {
   gsap.registerPlugin(MotionPathPlugin);
 
@@ -33,14 +36,14 @@ export const Home = () => {
   const setupMainLoop = useCallback((boids: BoidsManager, fontRenderer: FontRenderer) => {
     mainLoop
     .call(() => {
-      fontRenderer.changeColor({r:255, g:255, b:255, a:1})
+      fontRenderer.changeColor(colorOffWhite)
       boids.unfold();
     }, [],2)
     .call(() => boids.release(), [], '+=3')
     .call(() => {
       boids.roost().then(() => {
         boids.fold();
-        fontRenderer.changeColor({r: 0, g: 0, b:0, a: 1});
+        fontRenderer.changeColor(colorBlack);
       })
     }, [], '+=6');
   }, [mainLoop]);
@@ -51,12 +54,12 @@ export const Home = () => {
   }, [])
 
   const endIntro = useCallback(() => {
-    canvas?.changeColor({r: 255, g: 255, b: 255, a: 1}).then(() => {
+    canvas?.changeColor(colorOffWhite).then(() => {
       introBoidsRef.current.fold();
       changeButtonColor()
       mainLoop.play();
     });
-    introBoidsRef.current.changeColor({r: 0, g: 0, b: 0, a: 1});
+    introBoidsRef.current.changeColor(colorBlack);
   }, [canvas, changeButtonColor, mainLoop])
 
 
@@ -66,7 +69,7 @@ export const Home = () => {
     const glyph_I = fontRendererRef.current.glyphs['105']
     const finalDestination = glyph_I[glyph_I.length - 3]
     const rawPathSignatureSequence = MotionPathPlugin.stringToRawPath(canvas.canvas.width < 768 ? SignatureMobile : SignatureDesktop);
-    const endVectors = [new Vector(finalDestination.x, finalDestination.y + 200), finalDestination];
+    const endVectors = [new Vector(finalDestination.x - 10, finalDestination.y + 50), new Vector(finalDestination.x, finalDestination.y + 50), finalDestination];
     const rawPathEndVectors = MotionPathPlugin.arrayToRawPath(endVectors);
     const centeredPath = centerRawPath(rawPathSignatureSequence, canvas.canvas.width, canvas.canvas.height, .6);
 
@@ -78,10 +81,10 @@ export const Home = () => {
         shape: ShapeType.KITE(),
         sequence: [...centeredPath, ...rawPathEndVectors],
         color: {...boidColor},
-        angle: Math.PI * 2
+        angle: (Math.PI/180) * 243
       }
     )
-    introBoidsRef.current.addToCanvas(1);
+    introBoidsRef.current.addToCanvas(2);
 
     introBoidsRef.current.unfold();
 
@@ -92,7 +95,8 @@ export const Home = () => {
   }, [boidColor, canvas, endIntro])
 
   useEffect(() => {
-    const CanvasComponent = new CanvasManager(canvasRef.current as HTMLCanvasElement)
+    const CanvasComponent = new CanvasManager(canvasRef.current as HTMLCanvasElement);
+    CanvasComponent.options.backgroundColor = {...colorBlack};
     setCanvas(CanvasComponent);
 
     return () => {
@@ -106,7 +110,8 @@ export const Home = () => {
       const fontRenderer = new FontRenderer(canvas, {
         text: 'Anthony Lui',
         font: Italiana,
-        align: 'center'
+        align: 'center',
+        color: {...colorBlack},
       })
       canvas.init();
       fontRenderer.init();

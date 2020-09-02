@@ -4,6 +4,7 @@ import buildCanvasPaths from "../../utils/buildCanvasPaths";
 import CanvasManager from '../CanvasManager/CanvasManager';
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import IColor from '../../interface/IColor';
+import { colorOffWhite } from '../../pages/Home/Home';
 
 export default class BoidPath {
   canvasManager: any;
@@ -86,7 +87,7 @@ export default class BoidPath {
       this.trailHistory.splice(0, 1);
     }
 
-    this.context.strokeStyle = "white";
+    this.context.strokeStyle = `rgb(${colorOffWhite.r}, ${colorOffWhite.g}, ${colorOffWhite.b})`;
     this.context.beginPath();
 
     for(let i = 0; i < this.trailHistory.length; i++) {

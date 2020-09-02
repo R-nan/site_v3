@@ -102,7 +102,7 @@ export default class FontRenderer {
   public changeColor(color: IColor): void {
     const {r, g, b, a} = color;
     gsap.to(
-      this.animatedValues.color, 
+      this.options.color, 
       2, 
       { r, g, b, a, ease: 'power2.in' }
     );
@@ -113,7 +113,7 @@ export default class FontRenderer {
     //center the text in the window
     const x = (window.innerWidth - bounds.width) / 2,
       y = bounds.height + (window.innerHeight - bounds.height) / 2;
-    this.context.fillStyle = `rgba(${this.animatedValues.color.r}, ${this.animatedValues.color.g}, ${this.animatedValues.color.b})`;
+    this.context.fillStyle = `rgba(${this.options.color.r}, ${this.options.color.g}, ${this.options.color.b})`;
     this.renderer.fill(this.context, x, y);
   }
 }
