@@ -240,7 +240,6 @@ export default class Boid {
 
     this.context.strokeStyle = "white";
     this.context.beginPath();
-    // this.context.setLineDash([5, 15]);
 
     for(let i = 0; i < this.trailHistory.length; i++) {
       let position = this.trailHistory[i];
@@ -251,7 +250,6 @@ export default class Boid {
         this.context.lineTo(position.x, position.y)
       }
     }
-    // this.context.closePath();
     this.context.stroke();
   }
 

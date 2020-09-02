@@ -150,29 +150,29 @@ export const Home = () => {
     }
   });
 
-  const handleClick = useCallback(() => {
-    boidsRef.current.release();
-  }, []);
+  // const handleClick = useCallback(() => {
+  //   boidsRef.current.release();
+  // }, []);
 
-  const handleOnRelease = useCallback(() => {
-    boidsRef.current.release();
-  }, []);
+  // const handleOnRelease = useCallback(() => {
+  //   boidsRef.current.release();
+  // }, []);
 
-  const handleOnRest = useCallback(() => {
-    boidsRef.current.rest();
-  }, []);
+  // const handleOnRest = useCallback(() => {
+  //   boidsRef.current.rest();
+  // }, []);
 
-  const handleOnRoost = useCallback(() => {
-    boidsRef.current.roost();
-  }, []);
+  // const handleOnRoost = useCallback(() => {
+  //   boidsRef.current.roost();
+  // }, []);
 
-  const handleOnUnfold = useCallback(() => {
-    boidsRef.current.unfold();
-  }, []);
+  // const handleOnUnfold = useCallback(() => {
+  //   boidsRef.current.unfold();
+  // }, []);
 
-  const handleOnFold = useCallback(() => {
-    boidsRef.current.fold();
-  }, []);
+  // const handleOnFold = useCallback(() => {
+  //   boidsRef.current.fold();
+  // }, []);
 
   return (
     <StyledHome>
