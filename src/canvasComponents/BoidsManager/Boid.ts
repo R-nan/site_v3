@@ -6,6 +6,7 @@ import ShapeType from "./ShapeType";
 import buildCanvasPaths from "../../utils/buildCanvasPaths";
 import BoidStates from "./BoidStates";
 import { map } from '../../utils/utils';
+import { colorBlack } from '../../pages/Home/Home';
 
 export default class Boid {
   private canvas: HTMLCanvasElement;
@@ -215,6 +216,10 @@ export default class Boid {
     } else if (position.y >= this.canvas.height) {
       position.y = 0;
     }
+
+    if (position.x <= 0 || position.x >= this.canvas.width || position.y <= 0 || position.y >= this.canvas.height) {
+      this.trailHistory = [];
+    }
   }
 
   public flock(boids: Array<Boid>) {
@@ -238,9 +243,8 @@ export default class Boid {
       this.trailHistory.splice(0, 1);
     }
 
-    this.context.strokeStyle = "white";
+    this.context.strokeStyle = `rgb(${colorBlack.r}, ${colorBlack.g}, ${colorBlack.b})`;
     this.context.beginPath();
-    // this.context.setLineDash([5, 15]);
 
     for(let i = 0; i < this.trailHistory.length; i++) {
       let position = this.trailHistory[i];
@@ -251,7 +255,7 @@ export default class Boid {
         this.context.lineTo(position.x, position.y)
       }
     }
-    // this.context.closePath();
+
     this.context.stroke();
   }
 

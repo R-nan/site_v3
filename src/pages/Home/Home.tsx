@@ -21,6 +21,7 @@ import centerRawPath from '../../utils/centerRawPath';
 
 export const colorOffWhite: IColor = {r: 255, g: 242, b: 227, a: 1};
 export const colorBlack: IColor = {r: 42, g: 59, b: 61, a: 1};
+export const colorRed: IColor = {r: 220, g: 20, b: 60, a: 1};
 
 export const Home = () => {
   gsap.registerPlugin(MotionPathPlugin);
@@ -31,7 +32,7 @@ export const Home = () => {
   const boidsRef = useRef<any | null>(null);
   const introBoidsRef = useRef<any | null>(null);
   const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 8});
-  const boidColor: IColor = {r: 220, g: 20, b: 60, a: 1};
+  const boidColor: IColor = colorRed;
   const buttonContainerRef = useRef<any | null>(null);
   const setupMainLoop = useCallback((boids: BoidsManager, fontRenderer: FontRenderer) => {
     mainLoop
@@ -124,7 +125,8 @@ export const Home = () => {
           initialPositions: fontVectors(),
           boidShape: ShapeType.KITE(),
           boidState: BoidStates.REST,
-          color: {...boidColor}
+          color: {...boidColor},
+          showTrail: true,
         })
 
         boids.init();

@@ -41,8 +41,14 @@ export default class BoidsManager {
       distanceToResolve
     } = this.options;
 
+    const positions = [...initialPositions];
+    
     for( let i = 0; i < count; i++) {
-      const randomLetterVector = randomInArray(initialPositions);
+
+      const randomLetterVector = randomInArray(positions);
+
+      positions.splice(randomLetterVector.index, 1);
+      
       this.boids.push(new Boid(
         this.canvas, 
         this.context,
