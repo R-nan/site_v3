@@ -293,7 +293,6 @@ export default class Boid {
         this.context.lineTo(position.x, position.y)
       }
     }
-
     this.context.stroke();
   }
 
