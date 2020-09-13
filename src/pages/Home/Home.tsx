@@ -29,11 +29,11 @@ export const Home = () => {
   gsap.registerPlugin(MotionPathPlugin);
 
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
+  const [enableMouse, setEnableMouse] = useState<boolean>(false);
   const [canvas, setCanvas] = useState<CanvasManager | null>(null);
   const fontRendererRef = useRef<any | null>(null);
   const boidsRef = useRef<any | null>(null);
   const introBoidsRef = useRef<any | null>(null);
-  const mousePredatorRef = useRef<any | null>(null);
   const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 8});
   const boidColor: IColor = colorRed;
   const buttonContainerRef = useRef<any | null>(null);
@@ -59,7 +59,9 @@ export const Home = () => {
 
   const endIntro = useCallback(() => {
     canvas?.changeColor(colorOffWhite).then(() => {
-      introBoidsRef.current.fold();
+      introBoidsRef.current.playingSequence = false;
+      setEnableMouse(true);
+      introBoidsRef.current.options.trailColor = {...colorBlack};
       changeButtonColor()
       mainLoop.play();
     });
@@ -80,14 +82,21 @@ export const Home = () => {
     introBoidsRef.current = new BoidPath(
       canvas,
       {
+        target: new Vector(finalDestination.x, finalDestination.y),
         position: new Vector(centeredPath[0][0], centeredPath[0][1]),
+        velocity: new Vector(0, 1),
+        acceleration: new Vector(),
+        maxSpeed: 15,
+        maxForce: 0.2,
         size: canvas.canvas.width / 250,
         shape: ShapeType.KITE(),
         sequence: [...centeredPath, ...rawPathEndVectors],
         color: {...boidColor},
-        angle: (Math.PI/180) * 243
+        angle: (Math.PI/180) * 243,
+        trailColor: colorOffWhite,
       }
     )
+
     introBoidsRef.current.addToCanvas(2);
 
     introBoidsRef.current.unfold();
@@ -121,20 +130,10 @@ export const Home = () => {
       fontRenderer.init();
       fontRenderer.addToCanvas();
       
-      mousePredatorRef.current = new Predator(canvas.canvas, canvas.context, {
-        target: new Vector(400, 400),
-        position: new Vector(400, 400),
-        velocity: Vector.random2D(),
-        acceleration: new Vector(),
-        maxSpeed: 15,
-        maxForce: 0.2,
-        size: 4,
-        boidShape: ShapeType.KITE_OPEN(),
-        color: colorBlack,
-        showTrail: true,
-      });
-
       fontRenderer.getFontVectors().then((fontVectors) => {
+        fontRendererRef.current = fontRenderer;
+        fontVectors();
+        setupIntro();
         const boids = new BoidsManager(canvas, {
           count: 200,
           size: canvas.canvas.width / 400,
@@ -143,22 +142,21 @@ export const Home = () => {
           boidState: BoidStates.REST,
           color: {...boidColor},
           showTrail: true,
-          predators: [mousePredatorRef.current]
+          predators: [introBoidsRef.current]
         })
 
         boids.init();
-        fontRendererRef.current = fontRenderer;
         boidsRef.current = boids;
 
         boids.addToCanvas(0);
         
         setupMainLoop(boidsRef.current, fontRendererRef.current)
-        setupIntro();
         // mainLoop.play();
       });
 
     }
-  }, [boidColor, canvas, mainLoop, setupIntro, setupMainLoop]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canvas]);
 
   useResize(() => {
     if (canvas && boidsRef && fontRendererRef) {
@@ -171,10 +169,13 @@ export const Home = () => {
   });
 
   useMouseMove(canvasRef, (event) => {
-    const { target } = mousePredatorRef.current.options;
+    const { target } = introBoidsRef.current.options;
 
-    target.x = event.x;
-    target.y = event.y
+    if(enableMouse) {
+      target.x = event.x;
+      target.y = event.y
+    }
+
   })
 
   const handleClick = useCallback(() => {

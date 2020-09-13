@@ -5,6 +5,7 @@ import CanvasManager from '../CanvasManager/CanvasManager';
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import IColor from '../../interface/IColor';
 import { colorOffWhite } from '../../pages/Home/Home';
+import { map } from '../../utils/utils';
 
 export default class BoidPath {
   canvasManager: any;
@@ -12,6 +13,7 @@ export default class BoidPath {
   canvas: any;
   context: any;
   trailHistory: any[];
+  playingSequence: boolean;
 
   constructor(canvasManager: CanvasManager, options: any) {
     gsap.registerPlugin(MotionPathPlugin);
@@ -20,6 +22,7 @@ export default class BoidPath {
     this.context = this.canvasManager.context;
     this.options = options;
     this.trailHistory = [];
+    this.playingSequence = true;
   }
 
   public unfold(): Promise<any> {
@@ -81,13 +84,15 @@ export default class BoidPath {
   }
 
   private drawTrail(currentPosition: Vector): void {
+    const { trailColor } = this.options;
+
     this.trailHistory.push(currentPosition.copy());
 
     if (this.trailHistory.length > 100) {
       this.trailHistory.splice(0, 1);
     }
 
-    this.context.strokeStyle = `rgb(${colorOffWhite.r}, ${colorOffWhite.g}, ${colorOffWhite.b})`;
+    this.context.strokeStyle = `rgb(${trailColor.r}, ${trailColor.g}, ${trailColor.b})`;
     this.context.beginPath();
 
     for(let i = 0; i < this.trailHistory.length; i++) {
@@ -115,16 +120,52 @@ export default class BoidPath {
     this.canvasManager.modifiers.splice(index, 0, this.draw.bind(this))
   }
 
+  public arrive(): void {
+    const { position, velocity, acceleration, maxSpeed, maxForce, target } = this.options;
+    const maxArrivalSpeed = 15;
+    const desired: Vector = Vector.sub(target, position);
+    const distance: number = desired.mag();
+    desired.normalize();
+
+    let speed = maxArrivalSpeed;
+
+    if (distance < 500) {
+      speed = map(distance, 0, 500, 0, maxArrivalSpeed);
+      desired.mult(speed);
+    } else {
+      desired.mult(maxArrivalSpeed);
+    }
+
+    const steer = Vector.sub(desired, velocity);
+    steer.limit(maxForce)
+
+    
+    acceleration.add(steer);
+    velocity.limit(maxSpeed);
+    velocity.add(acceleration);
+    position.add(velocity);
+    acceleration.mult(0);
+  }
+
   protected draw(): void {
-    const { position, shape, angle } = this.options;
+    const { position, shape, angle, velocity, maxSpeed } = this.options;
     const {r, g, b, a} = this.options.color;
+
+    if(!this.playingSequence) this.arrive();
+    
 
     this.context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
     this.drawTrail(position);
     this.context.save();
     this.context.translate(position.x, position.y);
-    this.context.rotate(angle - (Math.PI / 2));
-    buildCanvasPaths(this.context, shape, this.options.size);
+    if(!this.playingSequence) {
+      const theta = velocity.heading() - Math.PI / 2;
+      this.context.rotate(theta);
+      buildCanvasPaths(this.context, shape, (10 * (velocity.mag() / maxSpeed)) + this.options.size);
+    } else {
+      this.context.rotate(angle - (Math.PI / 2));
+      buildCanvasPaths(this.context, shape, this.options.size);
+    }
     this.context.fill();
     this.context.restore();
   }

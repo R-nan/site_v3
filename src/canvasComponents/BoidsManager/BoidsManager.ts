@@ -171,8 +171,8 @@ export default class BoidsManager {
   }
 
   protected draw() {
-    [...this.boids, ...this.options.predators].forEach(boid => {
-      boid.update(this.boids, this.options.predators);
+    this.boids.forEach(boid => {
+      boid.update(this.boids);
     })
   }
 }
