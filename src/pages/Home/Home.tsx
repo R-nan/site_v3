@@ -10,6 +10,7 @@ import BoidsManager from '../../canvasComponents/BoidsManager/BoidsManager';
 import ShapeType from '../../canvasComponents/BoidsManager/ShapeType';
 import BoidStates from '../../canvasComponents/BoidsManager/BoidStates';
 import { useResize } from '../../hooks/useResize';
+import { useMouseMove } from '../../hooks/useMouseMove';
 import Vector from '../../utils/Vector';
 import IColor from '../../interface/IColor';
 import { ReactComponent as IconMail } from '../../assets/svg/mail.svg';
@@ -18,6 +19,7 @@ import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
 import BoidPath from '../../canvasComponents/BoidsManager/BoidPath';
 import { SignatureDesktop, SignatureMobile } from '../../data/Signature';
 import centerRawPath from '../../utils/centerRawPath';
+import Predator from '../../canvasComponents/BoidsManager/Predator';
 
 export const colorOffWhite: IColor = {r: 255, g: 242, b: 227, a: 1};
 export const colorBlack: IColor = {r: 42, g: 59, b: 61, a: 1};
@@ -31,6 +33,7 @@ export const Home = () => {
   const fontRendererRef = useRef<any | null>(null);
   const boidsRef = useRef<any | null>(null);
   const introBoidsRef = useRef<any | null>(null);
+  const mousePredatorRef = useRef<any | null>(null);
   const mainLoop: GSAPTimeline = gsap.timeline({repeat: -1, paused: true, repeatDelay: 8});
   const boidColor: IColor = colorRed;
   const buttonContainerRef = useRef<any | null>(null);
@@ -46,7 +49,7 @@ export const Home = () => {
         boids.fold();
         fontRenderer.changeColor(colorBlack);
       })
-    }, [], '+=6');
+    }, [], '+=10');
   }, [mainLoop]);
 
   const changeButtonColor = useCallback(() => {
@@ -118,15 +121,29 @@ export const Home = () => {
       fontRenderer.init();
       fontRenderer.addToCanvas();
       
+      mousePredatorRef.current = new Predator(canvas.canvas, canvas.context, {
+        target: new Vector(400, 400),
+        position: new Vector(400, 400),
+        velocity: Vector.random2D(),
+        acceleration: new Vector(),
+        maxSpeed: 15,
+        maxForce: 0.2,
+        size: 4,
+        boidShape: ShapeType.KITE_OPEN(),
+        color: colorBlack,
+        showTrail: true,
+      });
+
       fontRenderer.getFontVectors().then((fontVectors) => {
         const boids = new BoidsManager(canvas, {
-          count: 100,
-          size: canvas.canvas.width / 250,
+          count: 200,
+          size: canvas.canvas.width / 400,
           initialPositions: fontVectors(),
           boidShape: ShapeType.KITE(),
           boidState: BoidStates.REST,
           color: {...boidColor},
           showTrail: true,
+          predators: [mousePredatorRef.current]
         })
 
         boids.init();
@@ -137,10 +154,11 @@ export const Home = () => {
         
         setupMainLoop(boidsRef.current, fontRendererRef.current)
         setupIntro();
+        // mainLoop.play();
       });
 
     }
-  }, [boidColor, canvas, setupIntro, setupMainLoop]);
+  }, [boidColor, canvas, mainLoop, setupIntro, setupMainLoop]);
 
   useResize(() => {
     if (canvas && boidsRef && fontRendererRef) {
@@ -151,6 +169,13 @@ export const Home = () => {
       })
     }
   });
+
+  useMouseMove(canvasRef, (event) => {
+    const { target } = mousePredatorRef.current.options;
+
+    target.x = event.x;
+    target.y = event.y
+  })
 
   const handleClick = useCallback(() => {
     boidsRef.current.release();

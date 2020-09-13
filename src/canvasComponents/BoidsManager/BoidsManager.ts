@@ -1,18 +1,19 @@
 import gsap from 'gsap';
 import CanvasManager from "../CanvasManager/CanvasManager";
-import { IBoidsManagerOptions } from "./IBoidsManager";
+import { IBoidsManagerOptions, IPredator } from "./IBoidsManager";
 import Boid from "./Boid";
 import Vector from "../../utils/Vector";
 import { randomInArray } from "../../utils/random";
 import BoidStates from "./BoidStates";
 import IColor from "../../interface/IColor";
+import Predator from './Predator';
 
 export default class BoidsManager {
   private canvasManager: CanvasManager;
   private options: IBoidsManagerOptions;
   private canvas: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
-  private boids: Array<Boid>
+  private boids: Array<Boid>;
   private sequenceCounter: number;
   private sequencePromiseResolver: any;
 
@@ -38,11 +39,12 @@ export default class BoidsManager {
       size, 
       maxSpeed,
       showTrail,
-      distanceToResolve
+      distanceToResolve,
+      predators
     } = this.options;
 
     const positions = [...initialPositions];
-    
+
     for( let i = 0; i < count; i++) {
 
       const randomLetterVector = randomInArray(positions);
@@ -70,7 +72,8 @@ export default class BoidsManager {
           sequence,
           color,
           showTrail,
-          distanceToResolve
+          distanceToResolve,
+          predators,
         }
       ))
     }
@@ -168,8 +171,8 @@ export default class BoidsManager {
   }
 
   protected draw() {
-    this.boids.forEach(boid => {
-      boid.update(this.boids);
+    [...this.boids, ...this.options.predators].forEach(boid => {
+      boid.update(this.boids, this.options.predators);
     })
   }
 }

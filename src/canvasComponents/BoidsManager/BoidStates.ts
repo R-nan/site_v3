@@ -1,10 +1,11 @@
 import Boid from "./Boid";
+import Predator from "./Predator";
 
 const BoidStates = {
   REST: (boid: Boid) => {},
-  RELEASE: (boid: Boid, boids: Boid[]) => {
+  RELEASE: (boid: Boid, boids: Array<Boid>, predators: Array<Predator>) => {
     const { velocity, position, acceleration, maxSpeed } = boid.options;
-    boid.flock(boids);
+    boid.flock(boids, predators);
     velocity.limit(maxSpeed);
     velocity.add(acceleration);
     position.add(velocity);

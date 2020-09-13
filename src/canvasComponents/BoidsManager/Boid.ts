@@ -7,6 +7,7 @@ import buildCanvasPaths from "../../utils/buildCanvasPaths";
 import BoidStates from "./BoidStates";
 import { map } from '../../utils/utils';
 import { colorBlack } from '../../pages/Home/Home';
+import Predator from './Predator';
 
 export default class Boid {
   private canvas: HTMLCanvasElement;
@@ -36,6 +37,7 @@ export default class Boid {
       target: new Vector(0, 0),
       sequence: [new Vector(100, 600), new Vector(300, 300), new Vector(400, 10)],
       color: {r: 255, g: 255, b: 255, a: 1},
+      predators: [],
     };
     this.trailHistory = [];
 
@@ -122,7 +124,7 @@ export default class Boid {
     }
   }
 
-  protected separation(boids: Array<Boid>, perception: number): Vector {
+  protected separation(boids: Array<Boid | Predator>, perception: number): Vector {
     const { position, velocity, maxSpeed, maxForce } = this.options;
 
     // add opposing force that is inversly proportional to neighboring boids
@@ -150,7 +152,7 @@ export default class Boid {
     return steering;
   }
 
-  protected alignment(boids: Array<Boid>, perception: number): Vector {
+  protected alignment(boids: Array<Boid | Predator>, perception: number): Vector {
     const { position, velocity, maxSpeed, maxForce } = this.options;
 
     let steering = new Vector();
@@ -176,7 +178,7 @@ export default class Boid {
   }
 
 
-  protected cohesion(boids: Array<Boid>, perception: number): Vector {
+  protected cohesion(boids: Array<Boid | Predator>, perception: number): Vector {
     const { position, velocity, maxSpeed, maxForce } = this.options;
     // take average location and steer the current location to it
     let steering = new Vector();
@@ -193,6 +195,40 @@ export default class Boid {
     if (total > 0) {
       steering.div(total);
       steering.sub(position);
+      steering.setMag(maxSpeed);
+      steering.sub(velocity);
+      steering.limit(maxForce);
+    } else {
+      steering = new Vector(0, 0);
+    }
+    return steering;
+  }
+
+  protected repulsion(boids: Array<Boid | Predator>, perception: number): Vector {
+    const { position, velocity, maxSpeed, maxForce } = this.options;
+
+    let steering = new Vector();
+    let total = 0;
+
+    for( let other of boids ) {
+      const distance = Vector.dist(position, other.options.position);
+      if (distance < perception) {
+        steering = Vector.sub(position, other.options.position);
+        steering.normalize();
+        if( distance !== 0) {
+          // const scale = 1 / distance;
+          steering.normalize();
+          steering.mult(maxForce * 7);
+          if (steering.mag() < 0) { //Don't let the boids turn around to avoid the obstacle.
+          steering.y = 0;
+          }
+        }
+        total++
+      }
+    }
+
+    if (total > 0) {
+      steering.div(total);
       steering.setMag(maxSpeed);
       steering.sub(velocity);
       steering.limit(maxForce);
@@ -222,7 +258,7 @@ export default class Boid {
     }
   }
 
-  public flock(boids: Array<Boid>) {
+  public flock(boids: Array<Boid>, predators: Array<Predator>) {
     const {acceleration, alignmentValue, cohesionValue, separationValue, size} = this.options
     const perception = size * 50;
     const nearbyBoids = boids;
@@ -230,10 +266,12 @@ export default class Boid {
     let alignment = this.alignment(nearbyBoids, perception);
     let cohesion = this.cohesion(nearbyBoids, perception);
     let separation = this.separation(nearbyBoids, perception);
+    let repulsion = this.repulsion(predators, perception );
 
     acceleration.add(alignment.mult(alignmentValue));
     acceleration.add(cohesion.mult(cohesionValue));
     acceleration.add(separation.mult(separationValue));
+    acceleration.add(repulsion.mult(1));
   }
 
   private drawTrail(currentPosition: Vector): void {
@@ -260,7 +298,7 @@ export default class Boid {
   }
 
   public update(boids: Array<Boid>): void {
-    this.options.boidState(this, boids);
+    this.options.boidState(this, boids, this.options.predators);
     this.checkEdges()
     this.draw();
   }
