@@ -1,3 +1,4 @@
 export enum RoutePath {
-  Home = '/'
+  Home = '/',
+  BreathingDots = '/dots'
 }

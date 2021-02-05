@@ -19,7 +19,6 @@ import { ReactComponent as IconLinkedIn } from '../../assets/svg/linkedin.svg';
 import BoidPath from '../../canvasComponents/BoidsManager/BoidPath';
 import { SignatureDesktop, SignatureMobile } from '../../data/Signature';
 import centerRawPath from '../../utils/centerRawPath';
-import Predator from '../../canvasComponents/BoidsManager/Predator';
 
 export const colorOffWhite: IColor = {r: 255, g: 242, b: 227, a: 1};
 export const colorBlack: IColor = {r: 42, g: 59, b: 61, a: 1};

@@ -1,12 +1,11 @@
 import gsap from 'gsap';
 import CanvasManager from "../CanvasManager/CanvasManager";
-import { IBoidsManagerOptions, IPredator } from "./IBoidsManager";
+import { IBoidsManagerOptions } from "./IBoidsManager";
 import Boid from "./Boid";
 import Vector from "../../utils/Vector";
 import { randomInArray } from "../../utils/random";
 import BoidStates from "./BoidStates";
 import IColor from "../../interface/IColor";
-import Predator from './Predator';
 
 export default class BoidsManager {
   private canvasManager: CanvasManager;

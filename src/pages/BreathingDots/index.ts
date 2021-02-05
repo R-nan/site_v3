@@ -1,0 +1,1 @@
+export { BreathingDots as default } from '../BreathingDots/BreathingDots';

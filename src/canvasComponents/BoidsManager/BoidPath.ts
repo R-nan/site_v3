@@ -4,7 +4,6 @@ import buildCanvasPaths from "../../utils/buildCanvasPaths";
 import CanvasManager from '../CanvasManager/CanvasManager';
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import IColor from '../../interface/IColor';
-import { colorOffWhite } from '../../pages/Home/Home';
 import { map } from '../../utils/utils';
 
 export default class BoidPath {
