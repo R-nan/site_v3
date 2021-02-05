@@ -8,18 +8,18 @@ export default class Dots {
   public initialState: any
 
   constructor() {
-    // const right = new THREE.Vector3(1, 0, 0);
+    const right = new THREE.Vector3(1, 0, 0);
     this.dotCount = 10000;
-    this.geometry = new THREE.CircleBufferGeometry(0.05)
+    this.geometry = new THREE.CircleBufferGeometry(0.15)
     this.material = new THREE.MeshBasicMaterial({color: 0xffffff})
     this.mesh = new THREE.InstancedMesh(this.geometry, this.material, this.dotCount);
     this.initialState = {
       vec: new THREE.Vector3(),
       transform: new THREE.Matrix4(),
       positions: this.setPositions(),
-      distances: this.setPositions().map((position) => position.length())
+      // distances: this.setPositions().map((position) => position.length())
 
-      // distances: this.setPositions().map((position) => position.length() + Math.cos(position.angleTo(right) * 8) * 100.5)
+      distances: this.setPositions().map((position) => position.length() + Math.cos(position.angleTo(right) * 8) * .5)
     }
   }
 
@@ -32,10 +32,11 @@ export default class Dots {
     const { vec, positions, transform, distances } = this.initialState
     
     for (let i = 0; i < 10000; ++i) {
-      const t = clock.getElapsedTime() - distances[i] / 80
-      const wave = this.roundedSquareWave(t, 0.2, 1, 1 / 3)
+      const dist = distances[i]
+      const t = clock.getElapsedTime() - dist / 25
+      const wave = this.roundedSquareWave(t, 0.15 + (0.2 * dist) / 72, .4, 1 / 3.8)
       const scale = 1 + wave * .3
-      vec.copy(positions[i]).multiplyScalar(scale  / 3)
+      vec.copy(positions[i]).multiplyScalar(wave  + 1.3)
       transform.setPosition(vec)
       this.mesh.setMatrixAt(i, transform)
     }
