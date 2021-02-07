@@ -1,25 +1,27 @@
 import * as THREE from 'three';
-
+import {createRandom} from '../../utils/random';
 export default class Dots {
   public geometry: THREE.CircleBufferGeometry
   public material: THREE.MeshBasicMaterial
   public mesh: THREE.InstancedMesh
   public dotCount: number
   public initialState: any
+  public testColor: THREE.Color
 
   constructor() {
-    // const right = new THREE.Vector3(1, 0, 0);
+    const right = new THREE.Vector3(1, 0, 0);
     this.dotCount = 10000;
-    this.geometry = new THREE.CircleBufferGeometry(0.05)
-    this.material = new THREE.MeshBasicMaterial({color: 0xffffff})
+    this.geometry = new THREE.CircleBufferGeometry(0.25)
+    this.material = new THREE.MeshBasicMaterial()
     this.mesh = new THREE.InstancedMesh(this.geometry, this.material, this.dotCount);
+    this.testColor = new THREE.Color('0xFF0000')
     this.initialState = {
       vec: new THREE.Vector3(),
       transform: new THREE.Matrix4(),
       positions: this.setPositions(),
-      distances: this.setPositions().map((position) => position.length())
+      // distances: this.setPositions().map((position) => position.length())
 
-      // distances: this.setPositions().map((position) => position.length() + Math.cos(position.angleTo(right) * 8) * 100.5)
+      distances: this.setPositions().map((position) => position.length() + Math.cos(position.angleTo(right) * 8) * 0.5)
     }
   }
 
@@ -32,15 +34,23 @@ export default class Dots {
     const { vec, positions, transform, distances } = this.initialState
     
     for (let i = 0; i < 10000; ++i) {
-      const t = clock.getElapsedTime() - distances[i] / 80
-      const wave = this.roundedSquareWave(t, 0.2, 1, 1 / 3)
+      // console.log(positions[i].x, positions[i].y, clock.getElapsedTime())
+      const dist = distances[i]
+      const t = clock.getElapsedTime()  - dist / 25
+      const wave = this.roundedSquareWave(t, 0.15 + (.2 * dist) / 72, .4, 2 / 3.8)
       const scale = 1 + wave * .3
-      vec.copy(positions[i]).multiplyScalar(scale  / 3)
+      vec.copy(positions[i]).multiplyScalar(wave  + 1.3)
       transform.setPosition(vec)
+      // this.mesh.setColorAt(i, new THREE.Color(createRandom.noise3D(
+      //   Math.abs(positions[i].x),
+      //   Math.abs(positions[i].y),
+      //   clock.getElapsedTime())))
+      // this.mesh.setColorAt(i, this.testColor)
       this.mesh.setMatrixAt(i, transform)
     }
       
       this.mesh.instanceMatrix.needsUpdate = true
+      // if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true
   }
 
   public setPositions() {
@@ -56,20 +66,4 @@ export default class Dots {
       return position
     })
   }
-
-  // public init() {
-  //   const transform = new THREE.Matrix4()
-
-  //   for (let i = 0; i < this.dotCount; ++i) {
-  //     let x = (i % 100) - 50;
-  //     let y = Math.floor(i / 100 ) - 50
-
-  //     y += (i % 2) * 0.5
-
-  //     x += Math.random() * 0.3
-  //     y += Math.random() * 0.3
-  //     transform.setPosition(x, y, 0)
-  //     this.mesh.setMatrixAt(i, transform)
-  //   }
-  // }
 }

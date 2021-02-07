@@ -11,7 +11,7 @@ export class BreathingDotsManager extends Canvas3DManager {
     this.renderer.sortObjects = false;
     this.dots = new Dots()
     this.scene.add(this.dots.mesh)
-    this.camera.position.z = 5;
+    this.camera.position.z = 25;
     this.effects = new TriColorEffect(this.scene, this.renderer, this.size, this.camera)
     this.init()
   }
