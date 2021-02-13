@@ -9,7 +9,7 @@ export default class Canvas3DManager {
   public clock: THREE.Clock
   public size: {[key: string]: number}
   public effects: IAbstractEffect | null
-
+  private requestId: number = 0;
 
   constructor(parentElement: HTMLElement) {
     this.parent = parentElement;
@@ -35,9 +35,19 @@ export default class Canvas3DManager {
 
   public update() {}
 
+  public dispose() {
+    cancelAnimationFrame(this.requestId)
+  }
+
+  public resize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
+  }
+
   public animate() {
     this.update()
-    requestAnimationFrame(this.animate.bind(this))
+    this.requestId = requestAnimationFrame(this.animate.bind(this))
     this.renderer.render(this.scene, this.camera)
     if(this.effects) {
       this.effects.update()

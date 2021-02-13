@@ -1,19 +1,24 @@
 
-import React, { createRef, RefObject, useLayoutEffect } from 'react';
+import React, { createRef, RefObject, useLayoutEffect, useState } from 'react';
 import { BreathingDotsManager } from '../../canvasComponents/BreathingDotsManager/BreathingDotsManager';
 import { useResize } from '../../hooks/useResize';
 
 export const BreathingDots = () => {
   const parentRef: RefObject<HTMLDivElement> = createRef();
-  
-  useLayoutEffect(() => {
-    new BreathingDotsManager(parentRef.current as HTMLDivElement)
+  const [component, setComponent] = useState<BreathingDotsManager | null>(null);
 
+  useLayoutEffect(() => {
+    setComponent(new BreathingDotsManager(parentRef.current as HTMLDivElement))
+    return () => {
+      component?.dotsDispose()
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useResize(() => {
-
+    if(component) {
+      component.resize()
+    }
   });
 
   return (

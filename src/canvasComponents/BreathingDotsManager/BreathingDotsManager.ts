@@ -22,6 +22,11 @@ export class BreathingDotsManager extends Canvas3DManager {
     }
   }
 
+  public dotsDispose() {
+    this.dots.dispose()
+    this.dispose()
+  }
+
   public init() {
     const {positions, transform} = this.dots.initialState
   

@@ -37,7 +37,7 @@ export default class Dots {
       // console.log(positions[i].x, positions[i].y, clock.getElapsedTime())
       const dist = distances[i]
       const t = clock.getElapsedTime()  - dist / 25
-      const wave = this.roundedSquareWave(t, 0.15 + (.2 * dist) / 72, .4, 2 / 3.8)
+      const wave = this.roundedSquareWave(t, 0.15 + (.2 * dist) / 72, .4, 1 / 3.8)
       const scale = 1 + wave * .3
       vec.copy(positions[i]).multiplyScalar(wave  + 1.3)
       transform.setPosition(vec)
@@ -65,5 +65,11 @@ export default class Dots {
       // position.y += Math.random() * 0.3
       return position
     })
+  }
+
+  public dispose() {
+    this.mesh.dispose()
+    this.geometry.dispose()
+    this.material.dispose()
   }
 }
