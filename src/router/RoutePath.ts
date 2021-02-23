@@ -1,4 +1,5 @@
 export enum RoutePath {
   Home = '/',
-  BreathingDots = '/dots'
+  BreathingDots = '/dots',
+  CcmExercises = '/ccm-exercises' // Code as Creative Medium
 }

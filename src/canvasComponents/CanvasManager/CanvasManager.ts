@@ -12,10 +12,12 @@ export default class CanvasManager {
   }
   public count: number = 0;
   public modifiers: Array<any>= [];
+  public frame: number;
 
   constructor(canvasElement: HTMLCanvasElement) {
     this.canvas = canvasElement;
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+    this.frame = 0;
     this.setupCanvas();
   }
 
@@ -54,6 +56,7 @@ export default class CanvasManager {
     this.context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
     this.context.fillRect(0, 0, width, height);
     this.modifiers.map(modifier => modifier());
+    this.frame++
     this.requestId = window.requestAnimationFrame(() => this.update());
   }
 

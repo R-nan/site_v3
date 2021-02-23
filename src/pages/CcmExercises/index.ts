@@ -1,0 +1,1 @@
+export {CcmExercises as default} from './CcmExercises';
