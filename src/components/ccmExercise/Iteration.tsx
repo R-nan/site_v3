@@ -1,7 +1,6 @@
 import React, { createRef, RefObject, useLayoutEffect, useState } from 'react';
 import IterationManager from '../../canvasComponents/CcmExercises/IterationManager'
 import { useResize } from '../../hooks/useResize';
-import { colorBlack } from '../../pages/Home/Home';
 import CanvasElement from '../CanvasElement';
 
 export const Iteration = () => {
@@ -15,7 +14,6 @@ export const Iteration = () => {
   useLayoutEffect(() => {
     const CanvasComponent = new IterationManager(canvasRef.current as HTMLCanvasElement);
     // CanvasComponent.options.backgroundColor = {...colorBlack};
-
     setCanvas(CanvasComponent);
     
     canvasInit(CanvasComponent);

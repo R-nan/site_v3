@@ -21,18 +21,22 @@ export default class IterationManager extends CanvasManager {
   }
 
   private createShape(size: number) {
-    const sides = 5
-    const step  = 2 * Math.PI / sides
+    const sides = 5 // for pentagon
+    // const step  = 2 * Math.PI / sides
     const height = 5
     const width = 30
     const shape = new Path2D()
       shape.moveTo(0, 0)
-      // this.shape.moveTo(-width / 2, -height / 2)
-      // this.shape.lineTo(width / 2, -height / 2)
-      // this.shape.lineTo(width / 2, height / 2)
-      // this.shape.lineTo(-width / 2, height / 2)
+      shape.moveTo(-width / 2, -height / 2)
+      shape.lineTo(width / 2, -height / 2)
+      shape.lineTo(width / 2, height / 2)
+      shape.lineTo(-width / 2, height / 2)
       for (let i = 0; i < sides + 1; i++) {
-        shape.lineTo(size * Math.cos(i * 2 * Math.PI / sides), size * Math.sin(i * 2 * Math.PI / sides))
+        if (i === 0) {
+          shape.moveTo(size * Math.cos(i * 2 * Math.PI / sides), size * Math.sin(i * 2 * Math.PI / sides))
+        } else {
+          shape.lineTo(size * Math.cos(i * 2 * Math.PI / sides), size * Math.sin(i * 2 * Math.PI / sides))
+        }
       }
       shape.closePath()
       return shape
@@ -50,10 +54,9 @@ export default class IterationManager extends CanvasManager {
       this.context.strokeStyle = `rgb(${createRandom.noise2D(x, y, time / 10000, 1.5) * 200 + 100}, ${createRandom.noise2D(y, x, time / 10000, 1.5)* 200 + 100}, 100)`
       this.context.lineWidth = 3
       this.context.translate(x, y)
-      this.context.rotate(time)
+      this.context.rotate(createRandom.noise2D(x, y, time / 10000, 1.5))
       this.context.stroke(this.createShape(createRandom.noise2D(x, y, time / 10000, 1.5) * 50))
       this.context.restore()
-
     });
   }
 

@@ -5,7 +5,7 @@ import { Iteration } from '../../components/ccmExercise';
 import {StyledCCM, StyledCcmList} from './styled'
 
 export const CcmExercises = () => {
-  let {path, url} = useRouteMatch()
+  let {path} = useRouteMatch()
 
   return (
     <StyledCCM>
@@ -14,7 +14,7 @@ export const CcmExercises = () => {
           <StyledCcmList>
             CCM Exercises
             <ul>
-              <Link to={`${url}/iteration`}>iteration</Link>
+              <Link to={`${path}/iteration`}>iteration</Link>
             </ul>
           </StyledCcmList>
         </Route>
