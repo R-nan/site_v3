@@ -1,18 +1,20 @@
 import React, { createRef, RefObject, useLayoutEffect, useState } from 'react';
-import IterationManager from '../../canvasComponents/CcmExercises/IterationManager'
+import IterStringManager from '../../canvasComponents/CcmExercises/IterStringManager'
 import { useResize } from '../../hooks/useResize';
+import { colorBlack } from '../../pages/Home/Home';
 import CanvasElement from '../CanvasElement';
 
-export const Iteration = () => {
+export const IterString = () => {
   const canvasRef: RefObject<HTMLCanvasElement> = createRef();
-  const [canvas, setCanvas] = useState<IterationManager | null>(null);
-  const canvasInit = (canvas: IterationManager) => {
+  const [canvas, setCanvas] = useState<IterStringManager | null>(null);
+  const canvasInit = (canvas: IterStringManager) => {
     canvas.init()
     canvas.setup()
     canvas.modifiers.push(() => canvas.draw())
   }
+
   useLayoutEffect(() => {
-    const CanvasComponent = new IterationManager(canvasRef.current as HTMLCanvasElement);
+    const CanvasComponent = new IterStringManager(canvasRef.current as HTMLCanvasElement);
     // CanvasComponent.options.backgroundColor = {...colorBlack};
     setCanvas(CanvasComponent);
     
@@ -29,10 +31,9 @@ export const Iteration = () => {
       canvas.resize()
     }
   });
-  
   return (
     <div>
-      <CanvasElement ref={canvasRef} id={'Iteration'}/>
+      <CanvasElement ref={canvasRef} id={'Iteration String'}/>
     </div>
   )
 }

@@ -17,6 +17,10 @@ export default class CanvasManager {
   constructor(canvasElement: HTMLCanvasElement) {
     this.canvas = canvasElement;
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+    this.options = {
+      mousePosition: {x: 0, y: 0},
+      backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+    }
     this.frame = 0;
     this.setupCanvas();
   }
@@ -24,9 +28,11 @@ export default class CanvasManager {
   private setupCanvas(): void {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+    this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this))
   }
 
-  protected onMouseMove(position: IMousePosition) {
+  protected onMouseMove(event: MouseEvent) {
+    const position: IMousePosition = {x: event.x, y: event.y}
     this.options.mousePosition = position;
   }
 
